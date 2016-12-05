@@ -1,0 +1,18 @@
+
+.ghosted-small-badge-icon {
+  height: 40px;
+  width: 40px;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+
+.small-badge-icon {
+  height: 40px;
+  width: 40px;
+}
+
+.ghosted-badge-name {
+  display:block;
+  padding:5px;
+  color: gray;
+}
