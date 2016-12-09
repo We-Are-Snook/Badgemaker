@@ -6,7 +6,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+require_once(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"]))) . '/config.php'); // allows going up through a symlink
 require_once($CFG->libdir . '/badgeslib.php');
 
 require_login();
