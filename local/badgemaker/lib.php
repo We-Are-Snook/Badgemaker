@@ -42,6 +42,11 @@
        }
      }
 
+     // check that the badge is one that is permitted to show public links
+     if (!local_badgemaker_badge_has_public_setting($badge)) {
+       continue;
+     }
+
      // get all the criteria for the badge
      $criteria = $badge->get_criteria();
 
@@ -97,6 +102,10 @@
        }
      }
 
+     if (!local_badgemaker_badge_has_public_setting($badge)) {
+       continue;
+     }
+
      // get all the criteria for the badge
      $criteria = $badge->get_criteria();
 
@@ -145,6 +154,22 @@
          return true;
        }
      }
+   }
+   return false;
+ }
+
+ function local_badgemaker_badge_has_public_setting($badge) {
+   global $CFG;
+   if (!$CFG->badgemaker_public_optional) {
+     return true;
+   }
+   $pp = $CFG->badgemaker_public_passphrase;
+   if (strlen($pp) == 0) {
+     $pp = get_string('default_public_phrase', 'local_badgemaker');
+   }
+   $res = preg_match("/$pp/i", $badge->description);
+   if ($res) {
+     return true;
    }
    return false;
  }
@@ -214,6 +239,7 @@
 
      // die('would now return file');
      // Download MUST be forced - security!
+    //  var_dump($file); die();
      send_stored_file($file, 0, 0, true);
  }
 
@@ -512,8 +538,24 @@
      return $badges;
  }
 
-function local_badgemaker_extend_settings_navigation(settings_navigation $navigation){
-
+function local_badgemaker_extend_settings_navigation($settingsnav, $context){
+  global $CFG, $PAGE;
+       if ($settingnode = $settingsnav->find('courseadmin', navigation_node::TYPE_COURSE)) {
+           $strfoo = "blah";//get_string('foo', 'local_myplugin');
+           $url = new moodle_url('/local/badgemaker/foo.php', array('id' => $PAGE->course->id));
+           $foonode = navigation_node::create(
+               $strfoo,
+               $url,
+               navigation_node::NODETYPE_LEAF,
+               'badgemaker',
+               'badgemaker',
+               new pix_icon('t/addcontact', $strfoo)
+           );
+           if ($PAGE->url->compare($url, URL_MATCH_BASE)) {
+               $foonode->make_active();
+           }
+           $settingnode->add_node($foonode);
+       }
 }
 
 // Based on add_front_page_course_essentials from navigationlib.php
