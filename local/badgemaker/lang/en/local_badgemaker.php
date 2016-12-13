@@ -17,3 +17,6 @@ $string['public_badge_title'] = 'Evidence passphrase';
 $string['public_badge_desc'] = 'Text phrase that will make badge evidence public';
 
 $string['default_public_phrase'] = 'Evidence for this badge will be publicly accessible';
+
+$string['my_badges'] = 'My Badges';
+$string['all_badges'] = 'All Badges Available';

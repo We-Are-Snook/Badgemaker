@@ -172,6 +172,22 @@ $userbadges->search = $search;
 echo $output->render($userbadges);
 
 
+$params = array('page' => $page);
+if ($contextid) {
+    $params['contextid'] = $contextid;
+}
+if ($searchquery) {
+    $params['search'] = $searchquery;
+}
+if ($showall) {
+    $params['showall'] = true;
+}
+$baseurl = new moodle_url('/cohort/index.php', $params);
+
+if ($editcontrols = cohort_edit_controls($context, $baseurl)) {
+    echo $OUTPUT->render($editcontrols);
+}
+
 /* Begin All Badges */
 
 $PAGE->set_context(context_system::instance());

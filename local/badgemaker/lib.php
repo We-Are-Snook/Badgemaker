@@ -580,7 +580,7 @@ function local_badgemaker_extend_navigation(global_navigation $navigation)
 
     // if badges are enabled and the user is allowed to view badges.
     if (!empty($CFG->enablebadges) && has_capability('moodle/badges:viewbadges', $sitecontext)) {
-        $url = new moodle_url('/local/badgemaker/badge_library.php');
+        $url = new moodle_url('/local/badgemaker/badgelibrary-mybadges.php');
         $blnode = $navigation->add(get_string('badge_library', 'local_badgemaker'), $url, navigation_node::TYPE_CONTAINER);
 
         // disabled this since it's in nav bar.
@@ -676,4 +676,59 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
         }
     }
     return $badges;
+}
+
+/**
+ * Returns navigation controls (tabtree) to be displayed on badge library pages
+ *
+ * @param context $context system or category context where tabs are about to be displayed
+ * @param moodle_url $currenturl
+ * @return null|renderable
+ */
+function local_badgemaker_tabs(context $context, moodle_url $currenturl) {
+    $tabs = array();
+
+    $myurl = new moodle_url('/local/badgemaker/badgelibrary-mybadges.php', array('contextid' => $context->id));
+    $tabs[] = new tabobject('my', $myurl, get_string('my_badges', 'local_badgemaker'));
+    $currenttab = 'my';
+
+    $allurl = new moodle_url('/local/badgemaker/badgelibrary-allbadges.php', array('contextid' => $context->id));
+    $tabs[] = new tabobject('all', $allurl, get_string('all_badges', 'local_badgemaker'));
+    if ($currenturl->get_path() === $allurl->get_path()) {
+        $currenttab = 'all';
+    }
+    /*
+    $currenttab = 'view';
+    $viewurl = new moodle_url('/cohort/index.php', array('contextid' => $context->id));
+    if (($searchquery = $currenturl->get_param('search'))) {
+        $viewurl->param('search', $searchquery);
+    }
+    if ($context->contextlevel == CONTEXT_SYSTEM) {
+        $tabs[] = new tabobject('view', new moodle_url($viewurl, array('showall' => 0)), get_string('systemcohorts', 'cohort'));
+        $tabs[] = new tabobject('viewall', new moodle_url($viewurl, array('showall' => 1)), get_string('allcohorts', 'cohort'));
+        if ($currenturl->get_param('showall')) {
+            $currenttab = 'viewall';
+        }
+    } else {
+        $tabs[] = new tabobject('view', $viewurl, get_string('cohorts', 'cohort'));
+    }
+    if (has_capability('moodle/cohort:manage', $context)) {
+        $addurl = new moodle_url('/cohort/edit.php', array('contextid' => $context->id));
+        $tabs[] = new tabobject('addcohort', $addurl, get_string('addcohort', 'cohort'));
+        if ($currenturl->get_path() === $addurl->get_path() && !$currenturl->param('id')) {
+            $currenttab = 'addcohort';
+        }
+
+        $uploadurl = new moodle_url('/cohort/upload.php', array('contextid' => $context->id));
+        $tabs[] = new tabobject('uploadcohorts', $uploadurl, get_string('uploadcohorts', 'cohort'));
+        if ($currenturl->get_path() === $uploadurl->get_path()) {
+            $currenttab = 'uploadcohorts';
+        }
+    }
+     */
+    if (count($tabs) > 1) {
+        return new tabtree($tabs, $currenttab);
+    }
+    return null;
+
 }
