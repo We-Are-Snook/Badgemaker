@@ -10,6 +10,8 @@ require_once(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"]))) . '/config.p
 require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(__FILE__).'/renderer.php');
 
+
+
 $path = '/local/badgemaker/badgelibrary-allbadges.php';
 
 $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
@@ -69,7 +71,8 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading($title);
-navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
+//navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
+navigation_node::override_active_url(new moodle_url('/local/badgemaker/badgelibrary-mybadges.php', array()));
 
 
 

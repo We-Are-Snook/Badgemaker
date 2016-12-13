@@ -69,7 +69,7 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading($title);
-navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
+//navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 
 $PAGE->requires->js('/badges/backpack.js');
 $PAGE->requires->js_init_call('check_site_access', null, false);
