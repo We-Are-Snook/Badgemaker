@@ -3,6 +3,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
+
 require_once($CFG->dirroot . '/badges/renderer.php');
 
 class theme_badgemaker_core_badges_renderer extends core_badges_renderer {
