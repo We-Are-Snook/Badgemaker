@@ -6,11 +6,11 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
-require_once(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"]))) . '/config.php'); // allows going up through a symlink
+require_once(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])))) . '/config.php'); // allows going up through a symlink
 require_once($CFG->libdir . '/badgeslib.php');
-require_once(dirname(__FILE__).'/renderer.php');
+require_once(dirname(dirname(__FILE__)).'/renderer.php');
 
-$path = '/local/badgemaker/badgelibrary-mybadges.php';
+$path = '/local/badgemaker/library/my.php';
 
 $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
 $courseid   = 0;//optional_param('id', 0, PARAM_INT);
@@ -66,9 +66,10 @@ $returnurl = new moodle_url($path, $urlparams); // '/badges/index.php'
 $PAGE->set_url($returnurl);
 
 $PAGE->set_context(context_system::instance());
+$title = 'Badge library: My badges';
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
-$PAGE->set_heading($title);
+//$PAGE->set_heading($title);
 //navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 
 $PAGE->requires->js('/badges/backpack.js');
@@ -101,7 +102,7 @@ badges_setup_backpack_js(); // MH must be before header is output
 
 echo $OUTPUT->header();
 
-$img = html_writer::empty_tag('img', array('src' => 'logo_web_800x600.png')); // align center does not work, right does though.
+$img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
 echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 echo '<p>';
 
@@ -110,6 +111,9 @@ echo '<p>';
 $context = context_user::instance($USER->id);
 $PAGE->set_context(context_system::instance());
 require_capability('moodle/badges:manageownbadges', $context);
+
+
+echo $OUTPUT->heading_with_help($title, 'localbadgesh', 'badges');
 
 // we will use these params if decide to persist search term between tabs.
 $params = array('page' => $page);

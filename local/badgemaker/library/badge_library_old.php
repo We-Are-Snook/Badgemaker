@@ -10,10 +10,6 @@ require_once(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"]))) . '/config.p
 require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(__FILE__).'/renderer.php');
 
-
-
-$path = '/local/badgemaker/badgelibrary-allbadges.php';
-
 $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
 $courseid   = 0;//optional_param('id', 0, PARAM_INT);
 $page       = 0;//optional_param('page', 0, PARAM_INT);
@@ -37,6 +33,7 @@ $show        = optional_param('show', 0, PARAM_INT);
 
 //disable paging because we are showing two tables.
 $badgesPerPage = PHP_INT_MAX; // BADGE_PERPAGE
+$path = '/local/badgemaker/badge_library.php';
 
 if (!in_array($sortby, array('name', 'status'))) {
     $sortby = 'name';
@@ -71,8 +68,7 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 $PAGE->set_heading($title);
-//navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
-navigation_node::override_active_url(new moodle_url('/local/badgemaker/badgelibrary-mybadges.php', array()));
+navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 
 
 
@@ -112,8 +108,40 @@ if (($delete || $archive) && has_capability('moodle/badges:deletebadge', $PAGE->
         redirect($returnurl);
     }
 }
+/* My Badge Actions */
+$output = new badgemaker_renderer($PAGE, '');
 
-//$output = new badgemaker_renderer($PAGE, '');
+if ($clearsearch) {
+    $search = '';
+}
+if ($hide) {
+    require_sesskey();
+    $DB->set_field('badge_issued', 'visible', 0, array('id' => $hide, 'userid' => $USER->id));
+} else if ($show) {
+    require_sesskey();
+    $DB->set_field('badge_issued', 'visible', 1, array('id' => $show, 'userid' => $USER->id));
+} else if ($download && $hash) {
+    require_sesskey();
+    $badge = new badge($download);
+    $name = str_replace(' ', '_', $badge->name) . '.png';
+    $filehash = badges_bake($hash, $download, $USER->id, true);
+    $fs = get_file_storage();
+    $file = $fs->get_file_by_hash($filehash);
+    send_stored_file($file, 0, 0, true, array('filename' => $name));
+}
+
+if ($deactivate && has_capability('moodle/badges:configuredetails', $PAGE->context)) {
+    require_sesskey();
+    $badge = new badge($deactivate);
+    if ($badge->is_locked()) {
+        $badge->set_status(BADGE_STATUS_INACTIVE_LOCKED);
+    } else {
+        $badge->set_status(BADGE_STATUS_INACTIVE);
+    }
+    $msg = 'deactivatesuccess';
+    $returnurl->param('msg', $msg);
+    redirect($returnurl);
+}
 
 // Include JS files for backpack support.
 badges_setup_backpack_js(); // MH must be before header is output
@@ -123,30 +151,48 @@ echo $OUTPUT->header();
 $img = html_writer::empty_tag('img', array('src' => 'logo_web_800x600.png')); // align center does not work, right does though.
 echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 echo '<p>';
+/* Begin My Badges modified from badges/mhbadges.php */
+
+$context = context_user::instance($USER->id);
+$PAGE->set_context(context_system::instance());
+require_capability('moodle/badges:manageownbadges', $context);
+
+
+$records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, $page, $badgesPerPage, $USER->id, $search);//badges_get_user_badges($USER->id, null, $page, $badgesPerPage, $search);
+$totalcount = count($records);
+
+$userbadges = new badge_user_collection($records, $USER->id);
+$userbadges->sort = $sortby; //'dateissued';
+$userbadges->dir = $sorthow; //'DESC';
+$userbadges->page = $page;
+$userbadges->perpage = $badgesPerPage;//BADGE_PERPAGE;
+$userbadges->totalcount = $totalcount;
+$userbadges->search = $search;
+
+echo $output->render($userbadges);
+
+
+$params = array('page' => $page);
+if ($contextid) {
+    $params['contextid'] = $contextid;
+}
+if ($searchquery) {
+    $params['search'] = $searchquery;
+}
+if ($showall) {
+    $params['showall'] = true;
+}
+$baseurl = new moodle_url('/cohort/index.php', $params);
+
+if ($editcontrols = cohort_edit_controls($context, $baseurl)) {
+    echo $OUTPUT->render($editcontrols);
+}
 
 /* Begin All Badges */
 
 $PAGE->set_context(context_system::instance());
-
-// we will use these params if decide to persist search term between tabs.
-$context = context_system::instance();
-$params = array('page' => $page);
-//if ($contextid) {
-//    $params['contextid'] = $contextid;
-//}
-//if ($searchquery) {
-//    $params['search'] = $searchquery;
-//}
-//if ($showall) {
-//    $params['showall'] = true;
-//}
-$baseurl = new moodle_url($path, $params);
-
-if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
-    echo $OUTPUT->render($editcontrols);
-}
-
 echo $output->heading('All badges available on this site');
+
 echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection');
 
 //$totalcount = count(badges_get_badges($type, $courseid, '', '' , '', ''));

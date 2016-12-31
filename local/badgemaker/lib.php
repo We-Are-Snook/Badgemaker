@@ -688,11 +688,11 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
 function local_badgemaker_tabs(context $context, moodle_url $currenturl) {
     $tabs = array();
 
-    $myurl = new moodle_url('/local/badgemaker/badgelibrary-mybadges.php', array('contextid' => $context->id));
+    $myurl = new moodle_url('/local/badgemaker/library/my.php', array('contextid' => $context->id));
     $tabs[] = new tabobject('my', $myurl, get_string('my_badges', 'local_badgemaker'));
     $currenttab = 'my';
 
-    $allurl = new moodle_url('/local/badgemaker/badgelibrary-allbadges.php', array('contextid' => $context->id));
+    $allurl = new moodle_url('/local/badgemaker/library/all.php', array('contextid' => $context->id));
     $tabs[] = new tabobject('all', $allurl, get_string('all_badges', 'local_badgemaker'));
     if ($currenturl->get_path() === $allurl->get_path()) {
         $currenttab = 'all';
