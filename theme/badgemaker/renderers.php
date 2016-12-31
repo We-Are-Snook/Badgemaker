@@ -22,6 +22,14 @@ class theme_badgemaker_core_badges_renderer extends core_badges_renderer {
     $output .= html_writer::start_tag('div', array('id' => 'badge'));
     $output .= html_writer::start_tag('div', array('id' => 'badge-image'));
     $output .= html_writer::empty_tag('img', array('src' => $badgeclass['image'], 'alt' => $badge->name));
+    // var_dump($badgeclass['image']);die();
+
+    // This is how you get a handle to the raw file with the larger image in it...
+    // $fs = get_file_storage();
+    // if ($file = $fs->get_file($badge->get_context()->id, 'badges', 'badgeimage', $badge->id, '/', 'f3.png')) {
+    //     var_dump($file);die();
+    // }
+
     if ($expiration < $now) {
       $output .= $this->output->pix_icon('i/expired',
       get_string('expireddate', 'badges', userdate($issued['expires'])), 'moodle', array('class' => 'expireimage'));
@@ -97,6 +105,7 @@ class theme_badgemaker_core_badges_renderer extends core_badges_renderer {
 
     if (isloggedin() || local_badgemaker_badge_has_public_setting($badge)) {
       // Print evidence.
+
       $agg = $badge->get_aggregation_methods();
       $evidence = $badge->get_criteria_completions($userinfo->id);
       $eids = array_map(create_function('$o', 'return $o->critid;'), $evidence);
@@ -119,17 +128,30 @@ class theme_badgemaker_core_badges_renderer extends core_badges_renderer {
       $courseModules = local_badgemaker_criteriaModulesForIssuedBadge($ibadge);
       foreach ($courseModules as $courseModule) {
         // check files
-        // $files = badgemaker_filesForCourseModule($courseModule, $ibadge->recipient->id);
+        // $missingFile = false;
         $files = local_badgemaker_filesAndAssignTitlesForCourseModule($courseModule, $ibadge->recipient->id);
         foreach ($files as $fileWithName) {
           $file = $fileWithName['file'];
+          $file->sync_external_file();
+          try {
+            $handle = $file->get_content_file_handle();
+          } catch (Exception $e) {
+            continue;
+            // $missingFile = true;
+          }
+          // die("status: $status<br>handle: $handle");
           $fpath = '/'.$file->get_contextid();
           $fpath .= '/assignsubmission_file/submission_files/';
           $fpath .= $file->get_itemid();
           $fpath .= '/'.$file->get_filename();
-          $furl = moodle_url::make_file_url('/pluginfile.php', $fpath, true);
           $name = $fileWithName['name'];
-          $fs = "<b>$name</b><br><ul><li>".html_writer::link($furl, $file->get_filename()).'</li></ul>';
+          // if ($missingFile) {
+          //   $fs = "<b>$name</b><br>";
+          // } else {
+            $furl = moodle_url::make_file_url('/pluginfile.php', $fpath, true);
+            $fs = "<b>$name</b><br><ul><li>".html_writer::link($furl, $file->get_filename()).'</li></ul>';
+          // }
+
           array_push($items, $fs);
         }
 
