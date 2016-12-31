@@ -255,7 +255,7 @@
  }
 
  function local_badgemaker_libraryPageURL() {
-   return $url = new moodle_url('/local/badgemaker/badge_library.php');
+   return new moodle_url('/local/badgemaker/library/my.php');
  }
 
  function local_badgemaker_aboutPageURL() {
@@ -580,7 +580,7 @@ function local_badgemaker_extend_navigation(global_navigation $navigation)
 
     // if badges are enabled and the user is allowed to view badges.
     if (!empty($CFG->enablebadges) && has_capability('moodle/badges:viewbadges', $sitecontext)) {
-        $url = new moodle_url('/local/badgemaker/badgelibrary-mybadges.php');
+        $url = local_badgemaker_libraryPageURL();
         $blnode = $navigation->add(get_string('badge_library', 'local_badgemaker'), $url, navigation_node::TYPE_CONTAINER);
 
         // disabled this since it's in nav bar.
@@ -688,11 +688,13 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
 function local_badgemaker_tabs(context $context, moodle_url $currenturl) {
     $tabs = array();
 
-    $myurl = new moodle_url('/local/badgemaker/library/my.php', array('contextid' => $context->id));
+    //$myurl = new moodle_url('/local/badgemaker/library/my.php', array('contextid' => $context->id));
+    $myurl = local_badgemaker_libraryPageURL();
     $tabs[] = new tabobject('my', $myurl, get_string('my_badges', 'local_badgemaker'));
     $currenttab = 'my';
 
-    $allurl = new moodle_url('/local/badgemaker/library/all.php', array('contextid' => $context->id));
+    //$allurl = new moodle_url('/local/badgemaker/library/all.php', array('contextid' => $context->id));
+    $allurl = new moodle_url('/local/badgemaker/library/all.php');
     $tabs[] = new tabobject('all', $allurl, get_string('all_badges', 'local_badgemaker'));
     if ($currenturl->get_path() === $allurl->get_path()) {
         $currenttab = 'all';

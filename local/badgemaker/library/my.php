@@ -9,8 +9,9 @@
 require_once(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])))) . '/config.php'); // allows going up through a symlink
 require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(dirname(__FILE__)).'/renderer.php');
+require_once(dirname(dirname(__FILE__)).'/lib.php');
 
-$path = '/local/badgemaker/library/my.php';
+$path =  '/local/badgemaker/library/my.php';
 
 $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
 $courseid   = 0;//optional_param('id', 0, PARAM_INT);
@@ -51,22 +52,32 @@ if ($page < 0) {
 require_login();
 
 $err = '';
-$urlparams = array('sort' => $sortby, 'dir' => $sorthow, 'page' => $page);
+$url = new moodle_url($path); // '/badges/index.php'
+
+if($sorthow !== 'ASC'){
+    $url->param('dir', $sorthow);
+}
+if($sortby !== 'name'){
+    $url->param('sort', $sortby);
+}
+if($search !== ''){
+    $url->param('search', $search);
+}
+//if($viewmode !== 'default'){
+//    $url->param('view', $viewmode);
+//}
 
 if ($course = $DB->get_record('course', array('id' => $courseid))) {
-    $urlparams['type'] = $type;
-    $urlparams['id'] = $course->id;
+    //$url->param('type', $type);
+    $url->param('id', $course->id);
 } else {
-    $urlparams['type'] = $type;
+    //$url->param('type', $type);
 }
 
-$title = get_string('badge_library', 'local_badgemaker');
-
-$returnurl = new moodle_url($path, $urlparams); // '/badges/index.php'
-$PAGE->set_url($returnurl);
+$PAGE->set_url($url);
 
 $PAGE->set_context(context_system::instance());
-$title = 'Badge library: My badges';
+$title = get_string('badge_library', 'local_badgemaker') . ': ' . get_string('my_badges', 'local_badgemaker');
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 //$PAGE->set_heading($title);
@@ -116,7 +127,7 @@ require_capability('moodle/badges:manageownbadges', $context);
 echo $OUTPUT->heading_with_help($title, 'localbadgesh', 'badges');
 
 // we will use these params if decide to persist search term between tabs.
-$params = array('page' => $page);
+//$params = array('page' => $page);
 //if ($contextid) {
 //    $params['contextid'] = $contextid;
 //}
@@ -126,7 +137,7 @@ $params = array('page' => $page);
 //if ($showall) {
 //    $params['showall'] = true;
 //}
-$baseurl = new moodle_url($path, $params);
+$baseurl = new moodle_url($path);
 
 if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);

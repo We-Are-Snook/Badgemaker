@@ -9,7 +9,7 @@
 require_once(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])))) . '/config.php'); // allows going up through a symlink
 require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(dirname(__FILE__)).'/renderer.php');
-
+require_once(dirname(dirname(__FILE__)).'/lib.php');
 
 
 $path = '/local/badgemaker/library/all.php';
@@ -81,17 +81,15 @@ if ($course = $DB->get_record('course', array('id' => $courseid))) {
     //$url->param('type', $type);
 }
 
-$title = get_string('badge_library', 'local_badgemaker');
-
 $PAGE->set_url($url);
 
 $PAGE->set_context(context_system::instance());
-$title = 'Badge library: All badges';
+$title = get_string('badge_library', 'local_badgemaker') . ': ' . get_string('all_badges', 'local_badgemaker');
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 //$PAGE->set_heading($title);
 //navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
-navigation_node::override_active_url(new moodle_url('/local/badgemaker/library/my.php', array()));
+navigation_node::override_active_url(local_badgemaker_libraryPageURL());
 
 
 

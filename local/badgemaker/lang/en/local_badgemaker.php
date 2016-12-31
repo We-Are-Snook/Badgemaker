@@ -19,8 +19,8 @@ $string['default_public_phrase'] = 'Evidence for this badge will be publicly acc
 
 $string['badge_library'] = 'Badge library';
 $string['add_new_site_badge'] = 'Add a new site badge';
-$string['my_badges'] = 'My Badges';
-$string['all_badges'] = 'All Badges';
+$string['my_badges'] = 'My badges';
+$string['all_badges'] = 'All badges';
 $string['course_and_site_badges'] = 'Course and site badges';
 $string['course_badges'] = 'Course badges';
 $string['site_badges'] = 'Site badges';
