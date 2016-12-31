@@ -40,11 +40,11 @@ class badgemaker_renderer extends core_badges_renderer {
 
         // Local badges.
         //$localhtml = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
-        $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
+        //$heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
         $localhtml = $searchform;
 
         $localhtml .= html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
-        $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
+        //$localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
 
         if ($badges->badges) {
             $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
@@ -170,13 +170,14 @@ class badgemaker_renderer extends core_badges_renderer {
     protected function render_badge_management(badge_management $badges) {
         $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
 
-        // New badge button.
         $htmlnew = '';
-        if (has_capability('moodle/badges:createbadge', $this->page->context)) {
-            $n['type'] = $this->page->url->get_param('type');
-            $n['id'] = $this->page->url->get_param('id');
-            $htmlnew = $this->output->single_button(new moodle_url('/badges/newbadge.php', $n), get_string('add_new_site_badge', 'local_badgemaker')); // MH /badges/ put in URL
-        }
+
+        // New badge button.
+//        if (has_capability('moodle/badges:createbadge', $this->page->context)) {
+//            $n['type'] = $this->page->url->get_param('type');
+//            $n['id'] = $this->page->url->get_param('id');
+//            $htmlnew = $this->output->single_button(new moodle_url('/badges/newbadge.php', $n), get_string('add_new_site_badge', 'local_badgemaker')); // MH /badges/ put in URL
+//        }
 
         $htmlpagingbar = $this->render($paging);
         $table = new html_table();
@@ -596,4 +597,52 @@ class badgemaker_renderer extends core_badges_renderer {
 //    protected function render_badge_user_collection(badge_user_collection $badges) {
 //        var_export($badges);
 //    }
+
+
+    /**
+     * Displays a heading for the management pages.
+     *
+     * @param string $heading The heading to display
+     * @param string|null $viewmode The current view mode if there are options.
+     * @param int|null $categoryid The currently selected category if there is one.
+     * @return string
+     */
+    public function library_heading($heading, $viewmode = null, $categoryid = null) { // copy of management_heading
+        global $PAGE;
+        $html = html_writer::start_div('coursecat-management-header clearfix');
+        if (!empty($heading)) {
+            $html .= $this->heading($heading);
+        }
+        if ($viewmode !== null) {
+            $html .= html_writer::start_div();
+
+            //$html .= $this->view_mode_selector(\core_course\management\helper::get_management_viewmodes(), $viewmode); // MH removed
+
+            // the key appears in the URL so keep it short
+            $viewmodes = array( // MH
+                'combined' => get_string('course_and_site_badges', 'local_badgemaker'),
+                'course' => get_string('course_badges', 'local_badgemaker'),
+                'site' => get_string('site_badges', 'local_badgemaker')
+            );
+            $managementRenderer = $PAGE->get_renderer('core_course', 'management'); // MH
+
+            $html .= $managementRenderer->view_mode_selector($viewmodes, $viewmode); // MH
+
+            /*
+            if ($viewmode === 'courses') {
+                $categories = coursecat::make_categories_list(array('moodle/category:manage', 'moodle/course:create'));
+                $nothing = false;
+                if ($categoryid === null) {
+                    $nothing = array('' => get_string('selectacategory'));
+                    $categoryid = '';
+                }
+                $select = new single_select($this->page->url, 'categoryid', $categories, $categoryid, $nothing);
+                $html .= $this->render($select);
+            }
+            */
+            $html .= html_writer::end_div();
+        }
+        $html .= html_writer::end_div();
+        return $html;
+    }
 }
