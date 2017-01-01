@@ -216,11 +216,22 @@ class badgemaker_renderer extends core_badges_renderer {
             // MH
             $context = $this->page->context;
             if($b->type == BADGE_TYPE_COURSE){
+              try {
                 $context = context_course::instance($b->courseid);
+              } catch (Exception $e) {
+                // context should be null anyway after the line in the try fails.
+              //  $context = null;
+              }
+
             }
 
-            $forlink =  print_badge_image($b, $context) . ' ' . // MH $forlink =  print_badge_image($b, $this->page->context) . ' ' .
+            $pbi = "";
+            if ($context) {
+              $pbi = print_badge_image($b, $context) . ' ';
+            }
+            $forlink =  $pbi . // MH $forlink =  print_badge_image($b, $this->page->context) . ' ' .
                 html_writer::start_tag('span') . $b->name . html_writer::end_tag('span');
+
             $name = html_writer::link(new moodle_url('/badges/overview.php', array('id' => $b->id)), $forlink, $style);
             $status = $b->statstring;
 
