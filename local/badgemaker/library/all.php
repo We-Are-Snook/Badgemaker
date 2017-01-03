@@ -184,7 +184,7 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 $records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0, $search);
 $totalcount = count($records);
 
-if ($totalcount) {
+
 
     //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
 
@@ -215,8 +215,11 @@ if ($totalcount) {
     // die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
 
     echo $output->render($badges); // also outputs add new badge button.
-} else {
+
+
+if (!$totalcount) {
     echo $output->notification(get_string('nobadges', 'badges'));
+  }
 
 // decided not to put this button on here because don't know course so would only be site badge
 // also removed from renderer which is what adds it to table
@@ -224,6 +227,6 @@ if ($totalcount) {
 //        echo $OUTPUT->single_button(new moodle_url('newbadge.php', array('type' => BADGE_TYPE_SITE, 'id' => $courseid)),
 //            get_string('newbadge', 'badges'));
 //    }
-}
+// }
 
 echo $OUTPUT->footer();

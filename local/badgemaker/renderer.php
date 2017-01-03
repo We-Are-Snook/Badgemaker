@@ -183,6 +183,7 @@ class badgemaker_renderer extends core_badges_renderer {
 //            $htmlnew = $this->output->single_button(new moodle_url('/badges/newbadge.php', $n), get_string('add_new_site_badge', 'local_badgemaker')); // MH /badges/ put in URL
 //        }
 
+      if ($badges->totalcount > 0) {
         $htmlpagingbar = $this->render($paging);
         // var_dump($htmlpagingbar);die();
         $table = new html_table();
@@ -271,6 +272,7 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->data[] = $row;
         }
         $htmltable = html_writer::table($table);
+      }
 
         return $htmlnew . $searchform . $htmlpagingbar . $htmltable . $htmlpagingbar;
     }
