@@ -74,7 +74,9 @@ if($search !== ''){
 if($viewmode !== 'default'){
     $url->param('view', $viewmode);
 }
-
+if ($clearsearch) {
+    $search = '';
+}
 if ($course = $DB->get_record('course', array('id' => $courseid))) {
     //$url->param('type', $type);
     $url->param('id', $course->id);
