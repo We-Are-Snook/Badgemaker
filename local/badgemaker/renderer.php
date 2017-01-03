@@ -168,8 +168,9 @@ class badgemaker_renderer extends core_badges_renderer {
     //  - actions column shown if has any action capability.
     //  - Badge status column shown if has any action capability.
     protected function render_badge_management(badge_management $badges) {
+      // var_dump($badges);die();
         $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
-
+        // var_dump($paging);die();
         $htmlnew = '';
 
         // Search box.
@@ -183,6 +184,7 @@ class badgemaker_renderer extends core_badges_renderer {
 //        }
 
         $htmlpagingbar = $this->render($paging);
+        // var_dump($htmlpagingbar);die();
         $table = new html_table();
         $table->attributes['class'] = 'collection';
 
@@ -213,7 +215,10 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->colclasses[] = get_string('actions');
         }
 
-        foreach ($badges->badges as $b) {
+        $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
+
+        // foreach ($badges->badges as $b) {
+        foreach ($pageBadges as $b) {
             $style = !$b->is_active() ? array('class' => 'dimmed') : array();
 
             // MH

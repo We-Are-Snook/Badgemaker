@@ -35,8 +35,7 @@ $hash        = optional_param('hash', '', PARAM_ALPHANUM);
 $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
-//disable paging because we are showing two tables.
-$badgesPerPage = PHP_INT_MAX; // BADGE_PERPAGE
+$badgesPerPage = 10; // BADGE_PERPAGE; // Where did this constant come from?  I don't see it.
 
 // drop down taken from course/management.php
 $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of default, course or site.
@@ -178,7 +177,7 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 }
 
 //$totalcount = count(badges_get_badges($type, $courseid, '', '' , '', ''));
-$records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, $page, $badgesPerPage, 0, $search);
+$records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0, $search);
 $totalcount = count($records);
 
 if ($totalcount) {
@@ -208,6 +207,8 @@ if ($totalcount) {
     $badges->perpage    = $badgesPerPage;
     $badges->totalcount = $totalcount;
     $badges->search     = $search;
+
+    // die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
 
     echo $output->render($badges); // also outputs add new badge button.
 } else {
