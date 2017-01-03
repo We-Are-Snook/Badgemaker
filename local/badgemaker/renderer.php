@@ -172,6 +172,9 @@ class badgemaker_renderer extends core_badges_renderer {
 
         $htmlnew = '';
 
+        // Search box.
+        $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+
         // New badge button.
 //        if (has_capability('moodle/badges:createbadge', $this->page->context)) {
 //            $n['type'] = $this->page->url->get_param('type');
@@ -264,7 +267,7 @@ class badgemaker_renderer extends core_badges_renderer {
         }
         $htmltable = html_writer::table($table);
 
-        return $htmlnew . $htmlpagingbar . $htmltable . $htmlpagingbar;
+        return $htmlnew . $searchform . $htmlpagingbar . $htmltable . $htmlpagingbar;
     }
 
     public function print_combined_overview_list($earnedBadges, $earnableBadges) {

@@ -207,6 +207,7 @@ if ($totalcount) {
     $badges->page       = $page;
     $badges->perpage    = $badgesPerPage;
     $badges->totalcount = $totalcount;
+    $badges->search     = $search;
 
     echo $output->render($badges); // also outputs add new badge button.
 } else {
