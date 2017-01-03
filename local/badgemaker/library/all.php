@@ -68,7 +68,9 @@ if($sorthow !== 'ASC'){
 if($sortby !== 'name'){
     $url->param('sort', $sortby);
 }
-
+if($search !== ''){
+    $url->param('search', $search);
+}
 if($viewmode !== 'default'){
     $url->param('view', $viewmode);
 }
