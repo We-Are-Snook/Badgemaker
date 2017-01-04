@@ -90,7 +90,7 @@ $PAGE->set_context(context_system::instance());
 $title = get_string('badge_library', 'local_badgemaker') . ': ' . get_string('all_badges', 'local_badgemaker');
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
-//$PAGE->set_heading($title);
+$PAGE->set_heading($title);
 //navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 navigation_node::override_active_url(local_badgemaker_libraryPageURL());
 
@@ -152,8 +152,13 @@ badges_setup_backpack_js(); // MH must be before header is output
 
 echo $OUTPUT->header();
 
-$img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
-echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
+echo '<div align="center">';
+$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '15%', 'align' => 'center')); // align center does not work, right does though.
+// echo $OUTPUT->box($img, 'boxwidthwide boxalignright');
+echo $OUTPUT->box($img);
+echo "</div>";
+// $img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
+// echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 echo '<p>';
 
 echo $OUTPUT->heading($title);
