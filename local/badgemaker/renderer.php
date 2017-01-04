@@ -44,10 +44,12 @@ class badgemaker_renderer extends core_badges_renderer {
         $localhtml = $searchform;
 
         $localhtml .= html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
-        //$localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
+        // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
 
         if ($badges->badges) {
             $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
+            // $bdgstr = get_string('badgesearned', 'badges', $badges->totalcount);
+            // $downloadbutton = $this->output->heading_with_help($bdgstr, 'localbadgesh', 'badges', '', '', 4, 'activatebadge');
             $downloadbutton .= $downloadall;
 
             // Table
@@ -182,8 +184,8 @@ class badgemaker_renderer extends core_badges_renderer {
 //            $n['id'] = $this->page->url->get_param('id');
 //            $htmlnew = $this->output->single_button(new moodle_url('/badges/newbadge.php', $n), get_string('add_new_site_badge', 'local_badgemaker')); // MH /badges/ put in URL
 //        }
-
       if ($badges->totalcount > 0) {
+
         $htmlpagingbar = $this->render($paging);
         // var_dump($htmlpagingbar);die();
         $table = new html_table();
@@ -212,7 +214,8 @@ class badgemaker_renderer extends core_badges_renderer {
         $table->colclasses[] = 'awards';
         $table->head[] = get_string('awards', 'badges');
         if($this->has_any_action_capability()){
-            $table->head[] = get_string('actions');
+          $actionhead = get_string('actions');
+            $table->head[] = $actionhead;//$this->output->heading_with_help($actionhead, '', '', '', '', 5);
             $table->colclasses[] = get_string('actions');
         }
 
@@ -272,9 +275,10 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->data[] = $row;
         }
         $htmltable = html_writer::table($table);
-      }
-
         return $htmlnew . /*$searchform .*/ $htmlpagingbar . $htmltable . $htmlpagingbar;
+
+      }
+        return $htmlnew;
     }
 
     public function print_combined_overview_list($earnedBadges, $earnableBadges) {
@@ -628,12 +632,14 @@ class badgemaker_renderer extends core_badges_renderer {
      * @param int|null $categoryid The currently selected category if there is one.
      * @return string
      */
-    public function library_heading($heading, $viewmode = null, $categoryid = null) { // copy of management_heading
+    public function library_heading($heading, $viewmode = null, $categoryid = null, $badges) { // copy of management_heading
         global $PAGE;
 
-        $html .= html_writer::start_div('clearfix');
+        $html = html_writer::start_div('clearfix');
+
         // $html = html_writer::start_div('libheading');
-        $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+        // $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+        $searchform = $this->helper_search_form($badges->search);
         $html .= "<div style=\"float: left;\">";
         $html .= $searchform;
         $html .= "</div>";
@@ -677,7 +683,8 @@ class badgemaker_renderer extends core_badges_renderer {
         $html .= '<div style="clear: both;"></div>';
         $html .= html_writer::end_div();
         if (!empty($heading)) {
-          $html .= $this->heading($heading, 4);
+          $html .= $this->output->heading($heading, 4);
+          // $html .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges', '', '', 4);
          }
         return $html;
     }

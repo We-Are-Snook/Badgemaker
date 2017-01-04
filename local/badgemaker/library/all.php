@@ -90,7 +90,7 @@ $PAGE->set_context(context_system::instance());
 $title = get_string('badge_library', 'local_badgemaker') . ': ' . get_string('all_badges', 'local_badgemaker');
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
-$PAGE->set_heading($title);
+// $PAGE->set_heading($title);
 //navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 navigation_node::override_active_url(local_badgemaker_libraryPageURL());
 
@@ -152,6 +152,9 @@ badges_setup_backpack_js(); // MH must be before header is output
 
 echo $OUTPUT->header();
 
+// Combine image and title into a single heading...
+$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '10%')); // align center does not work, right does though.
+echo $OUTPUT->heading($img.$title);
 // $img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
 // echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 // echo '<p>';
@@ -184,11 +187,17 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 $records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0, $search);
 $totalcount = count($records);
 
-
+$badges             = new badge_management($records);
+$badges->sort       = $sortby;
+$badges->dir        = $sorthow;
+$badges->page       = $page;
+$badges->perpage    = $badgesPerPage;
+$badges->totalcount = $totalcount;
+$badges->search     = $search;
 
     //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
 
-    echo $output->library_heading($totalcount . ' badges', $viewmode);
+    echo $output->library_heading($totalcount . ' badges', $viewmode, null, $badges);
     //echo $output->heading('All badges available on this site');
     // echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
 
@@ -204,13 +213,7 @@ $totalcount = count($records);
         echo $OUTPUT->notification(get_string($msg, 'badges'), 'notifysuccess');
     }
 
-    $badges             = new badge_management($records);
-    $badges->sort       = $sortby;
-    $badges->dir        = $sorthow;
-    $badges->page       = $page;
-    $badges->perpage    = $badgesPerPage;
-    $badges->totalcount = $totalcount;
-    $badges->search     = $search;
+
 
     // die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
 
@@ -228,11 +231,4 @@ if (!$totalcount) {
 //            get_string('newbadge', 'badges'));
 //    }
 // }
-
-echo '<div align="center">';
-$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '15%', 'align' => 'center')); // align center does not work, right does though.
-// echo $OUTPUT->box($img, 'boxwidthwide boxalignright');
-echo $OUTPUT->box($img);
-echo "</div>";
-
 echo $OUTPUT->footer();
