@@ -161,7 +161,7 @@ echo "</div>";
 // echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 echo '<p>';
 
-echo $OUTPUT->heading($title);
+// echo $OUTPUT->heading($title);
 
 /* Begin All Badges */
 

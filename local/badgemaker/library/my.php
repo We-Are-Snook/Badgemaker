@@ -127,7 +127,7 @@ $PAGE->set_context(context_system::instance());
 require_capability('moodle/badges:manageownbadges', $context);
 
 
-echo $OUTPUT->heading_with_help($title, 'localbadgesh', 'badges');
+// echo $OUTPUT->heading_with_help($title, 'localbadgesh', 'badges');
 
 // we will use these params if decide to persist search term between tabs.
 //$params = array('page' => $page);

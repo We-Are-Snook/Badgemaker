@@ -630,12 +630,16 @@ class badgemaker_renderer extends core_badges_renderer {
      */
     public function library_heading($heading, $viewmode = null, $categoryid = null) { // copy of management_heading
         global $PAGE;
-        $html = html_writer::start_div('coursecat-management-header clearfix');
+        // $html = html_writer::start_div('coursecat-management-header clearfix');
+        $html = html_writer::start_div('libheading');
         if (!empty($heading)) {
-            $html .= $this->heading($heading);
+            // $html .= $this->heading($heading);
+            $html .= "<div style=\"float: left;\">";
+            $html .= $this->heading($heading, 4);
+            $html .= "</div>";
         }
         if ($viewmode !== null) {
-            $html .= html_writer::start_div();
+            // $html .= html_writer::start_div();
 
             //$html .= $this->view_mode_selector(\core_course\management\helper::get_management_viewmodes(), $viewmode); // MH removed
 
@@ -646,8 +650,10 @@ class badgemaker_renderer extends core_badges_renderer {
                 'site' => get_string('site_badges', 'local_badgemaker')
             );
             $managementRenderer = $PAGE->get_renderer('core_course', 'management'); // MH
-
-            $html .= $managementRenderer->view_mode_selector($viewmodes, $viewmode); // MH
+// $html .= '<div style="clear: left;"></div>';
+            $html .= "<div style=\"float: right;\">";
+            $html .= $managementRenderer->view_mode_selector($viewmodes, $viewmode) . '</p>'; // MH
+            $html .= "</div>";
 
             /*
             if ($viewmode === 'courses') {
@@ -661,8 +667,9 @@ class badgemaker_renderer extends core_badges_renderer {
                 $html .= $this->render($select);
             }
             */
-            $html .= html_writer::end_div();
+            // $html .= html_writer::end_div();
         }
+        $html .= '<div style="clear: both;"></div>';
         $html .= html_writer::end_div();
         return $html;
     }
