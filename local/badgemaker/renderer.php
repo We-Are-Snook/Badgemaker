@@ -173,8 +173,8 @@ class badgemaker_renderer extends core_badges_renderer {
         // var_dump($paging);die();
         $htmlnew = '';
 
-        // Search box.
-        $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+        // Search box. // MB: Moved this to the library_heading function
+        // $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
 
         // New badge button.
 //        if (has_capability('moodle/badges:createbadge', $this->page->context)) {
@@ -274,7 +274,7 @@ class badgemaker_renderer extends core_badges_renderer {
         $htmltable = html_writer::table($table);
       }
 
-        return $htmlnew . $searchform . $htmlpagingbar . $htmltable . $htmlpagingbar;
+        return $htmlnew . /*$searchform .*/ $htmlpagingbar . $htmltable . $htmlpagingbar;
     }
 
     public function print_combined_overview_list($earnedBadges, $earnableBadges) {
@@ -630,14 +630,19 @@ class badgemaker_renderer extends core_badges_renderer {
      */
     public function library_heading($heading, $viewmode = null, $categoryid = null) { // copy of management_heading
         global $PAGE;
-        // $html = html_writer::start_div('coursecat-management-header clearfix');
-        $html = html_writer::start_div('libheading');
-        if (!empty($heading)) {
-            // $html .= $this->heading($heading);
-            $html .= "<div style=\"float: left;\">";
-            $html .= $this->heading($heading, 4);
-            $html .= "</div>";
-        }
+
+        $html .= html_writer::start_div('clearfix');
+        // $html = html_writer::start_div('libheading');
+        $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+        $html .= "<div style=\"float: left;\">";
+        $html .= $searchform;
+        $html .= "</div>";
+        // if (!empty($heading)) {
+        //     // $html .= $this->heading($heading);
+        //     $html .= "<div style=\"float: left;\">";
+        //     $html .= $this->heading($heading, 4);
+        //     $html .= "</div>";
+        // }
         if ($viewmode !== null) {
             // $html .= html_writer::start_div();
 
@@ -671,6 +676,9 @@ class badgemaker_renderer extends core_badges_renderer {
         }
         $html .= '<div style="clear: both;"></div>';
         $html .= html_writer::end_div();
+        if (!empty($heading)) {
+          $html .= $this->heading($heading, 4);
+         }
         return $html;
     }
 }

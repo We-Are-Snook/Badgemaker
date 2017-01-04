@@ -152,14 +152,9 @@ badges_setup_backpack_js(); // MH must be before header is output
 
 echo $OUTPUT->header();
 
-echo '<div align="center">';
-$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '15%', 'align' => 'center')); // align center does not work, right does though.
-// echo $OUTPUT->box($img, 'boxwidthwide boxalignright');
-echo $OUTPUT->box($img);
-echo "</div>";
 // $img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
 // echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
-echo '<p>';
+// echo '<p>';
 
 // echo $OUTPUT->heading($title);
 
@@ -195,7 +190,7 @@ $totalcount = count($records);
 
     echo $output->library_heading($totalcount . ' badges', $viewmode);
     //echo $output->heading('All badges available on this site');
-    echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection');
+    // echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
 
     if ($course && $course->startdate > time()) {
         echo $OUTPUT->box(get_string('error:notifycoursedate', 'badges'), 'generalbox notifyproblem');
@@ -233,5 +228,11 @@ if (!$totalcount) {
 //            get_string('newbadge', 'badges'));
 //    }
 // }
+
+echo '<div align="center">';
+$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '15%', 'align' => 'center')); // align center does not work, right does though.
+// echo $OUTPUT->box($img, 'boxwidthwide boxalignright');
+echo $OUTPUT->box($img);
+echo "</div>";
 
 echo $OUTPUT->footer();
