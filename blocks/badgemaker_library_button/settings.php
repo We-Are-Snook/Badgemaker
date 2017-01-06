@@ -11,7 +11,7 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('block_badgemaker_library_button_showlogo', get_string('showlogo', 'block_badgemaker_library_button'),
-                       get_string('showlogoconfig', 'block_badgemaker_library_button'), 1));
+                       get_string('showlogoconfig', 'block_badgemaker_library_button'), 0));
     $settings->add(new admin_setting_configtext('block_badgemaker_library_button_before',
     get_string('before', 'block_badgemaker_library_button'),
     get_string('beforeconfig', 'block_badgemaker_library_button'),

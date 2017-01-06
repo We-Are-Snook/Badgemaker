@@ -71,7 +71,7 @@ class block_badgemaker_library_button extends block_base {
         if (!empty($CFG->block_badgemaker_library_button_showlogo)) {
           if ($CFG->block_badgemaker_library_button_showlogo) {
             $ls = local_badgemaker_logo_source();
-            $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '10%', 'align' => 'left'));
+            $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%', 'align' => 'left'));
             $this->content->text .= $img;
           }
         }
