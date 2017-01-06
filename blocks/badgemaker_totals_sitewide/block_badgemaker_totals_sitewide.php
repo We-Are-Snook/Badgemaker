@@ -78,17 +78,22 @@ class block_badgemaker_totals_sitewide extends block_base {
         $issuedCount = local_badgemaker_issuedBadgesCount();
 
         $this->content->text .= "<b>";
-        $this->content->text .= html_writer::link(new moodle_url('/local/badgemaker/badge_library.php'), ''.$issuedCount);
+        $blurl = local_badgemaker_libraryPageURL();
+        $this->content->text .= html_writer::link($blurl, ''.$issuedCount);
         $this->content->text .= "</b>" . get_string('awarded', 'block_badgemaker_totals_sitewide');
         $this->content->text .= '<br>' . "<b>";
-        $this->content->text .= html_writer::link(new moodle_url('/local/badgemaker/badge_library.php'), ''.$totalBadges);
+        $this->content->text .= html_writer::link($blurl, ''.$totalBadges);
         $this->content->text .= '</b>' . get_string('all_badges', 'block_badgemaker_totals_sitewide');
         $this->content->text .= html_writer::end_span();
 
-        $foot = get_string('footer', 'block_badgemaker_totals_sitewide');
-        if (strlen($foot) > 0) {
-          $this->content->footer = html_writer::link(new moodle_url('/local/badgemaker/badge_library.php'), $foot);
-        }
+        // $foot = get_string('footer', 'block_badgemaker_totals_sitewide');
+        // if (strlen($foot) > 0) {
+        //   $this->content->footer = html_writer::link($blurl, $foot);
+        // }
+
+        $ls = local_badgemaker_logo_source();
+        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '15%'));
+        $this->content->footer = '<div align="center">'.html_writer::link($blurl, $img).'</div>';
 
         return $this->content;
     }

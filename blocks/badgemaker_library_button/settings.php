@@ -7,7 +7,6 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-// block_badgemaker_library_button
 
 if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('block_badgemaker_library_button_showlogo', get_string('showlogo', 'block_badgemaker_library_button'),
