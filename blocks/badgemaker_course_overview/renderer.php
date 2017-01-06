@@ -115,7 +115,7 @@ class block_badgemaker_course_overview_renderer extends block_course_overview_re
             $earned = local_badgemaker_filter_nonissued($earned);
 
             if (count($earned) > 0 || count($earnable) > 0) {
-              $brender = new badgemaker_renderer($this->page);
+              $brender = new badgemaker_renderer($this->page, '');
               $earnedCount = count($earned);
               $earnableCount = count($earnable);
               $totalBadgeCount = $earnedCount + $earnableCount;
