@@ -6,6 +6,7 @@
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
+global $CFG;
  require_once($CFG->libdir . '/badgeslib.php');
 
  function local_badgemaker_autolink($str, $attributes=array()) {
@@ -21,6 +22,10 @@
    $str = preg_replace('`([^"=\'>])((www).[^\s<]+[^\s<\.)])`i', '$1<a href="http://$2"'.$attrs.'>$2</a>', $str);
    $str = substr($str, 1);
    return $str;
+ }
+
+ function local_badgemaker_logo_source() {
+   return '/local/badgemaker/BM_icon.png';
  }
 
  function local_badgemaker_assignsubmission_file_pluginfile_user_has_badge_for_course_module_id($userid, $courseid, $cmid) {

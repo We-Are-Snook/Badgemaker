@@ -21,7 +21,7 @@ class block_badgemaker_library_button extends block_base {
     }
 
     public function has_config() {
-        return false;
+        return true;
     }
 
     public function instance_allow_config() {
@@ -62,9 +62,18 @@ class block_badgemaker_library_button extends block_base {
         $this->content->text = '';
 
         // before button
-        $bbc = get_string('maincontent_before_button', 'block_badgemaker_library_button');
-        if (strlen($bbc) > 0) {
-          $this->content->text .= $bbc;
+        if (!empty($CFG->block_badgemaker_library_button_before)) {
+          if (strlen($CFG->block_badgemaker_library_button_before) > 0) {
+            $this->content->text .= $CFG->block_badgemaker_library_button_before.'<br>';
+          }
+        }
+
+        if (!empty($CFG->block_badgemaker_library_button_showlogo)) {
+          if ($CFG->block_badgemaker_library_button_showlogo) {
+            $ls = local_badgemaker_logo_source();
+            $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '10%', 'align' => 'left'));
+            $this->content->text .= $img;
+          }
         }
 
         // button
@@ -72,16 +81,13 @@ class block_badgemaker_library_button extends block_base {
         $buttonTitle = get_string('button_text', 'block_badgemaker_library_button');
         $this->content->text .= $OUTPUT->single_button($buttonUrl, $buttonTitle);
 
-        // after button
-        $abc = get_string('maincontent_after_button', 'block_badgemaker_library_button');
-        if (strlen($abc) > 0) {
-          $this->content->text .= $abc;
-        }
+        // $this->content->text .= html_writer::end_tag("whatever");
 
-        // footer
-        $foot = get_string('footer', 'block_badgemaker_library_button');
-        if (strlen($foot) > 0) {
-          $this->content->footer = $foot;
+        // after button
+        if (!empty($CFG->block_badgemaker_library_button_after)) {
+          if (strlen($CFG->block_badgemaker_library_button_after) > 0) {
+            $this->content->text .= $CFG->block_badgemaker_library_button_after;
+          }
         }
 
         return $this->content;
