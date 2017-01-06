@@ -281,19 +281,26 @@ class badgemaker_renderer extends core_badges_renderer {
         return $htmlnew;
     }
 
-    public function print_combined_overview_list($earnedBadges, $earnableBadges) {
+    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40) {
       global $USER, $CFG;
       $badges = array();
-      foreach ($earnedBadges as $eb) {
-        $badges[] = $eb;
+      if (count($earnedBadges) > 0) {
+        foreach ($earnedBadges as $eb) {
+          $badges[] = $eb;
+        }
       }
-      foreach($earnableBadges as $eb) {
-        $badges[] = $eb;
+      if (count($earnableBadges) > 0) {
+        foreach($earnableBadges as $eb) {
+          $badges[] = $eb;
+        }
       }
       foreach ($badges as $badge) {
           $earnedThisOne = in_array($badge, $earnedBadges);
           $imageClass = $earnedThisOne ? 'small-badge-icon' : 'ghosted-small-badge-icon';
           $textClass = $earnedThisOne ? 'badge-name' : 'ghosted-badge-name';
+          if (empty($external)) {
+            $external = null;
+          }
           if (!$external) {
               $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
               $bname = $badge->name;
@@ -316,6 +323,9 @@ class badgemaker_renderer extends core_badges_renderer {
 
           $download = $status = $push = '';
           if ($earnedThisOne) {
+            if (empty($userid)) {
+              $userid = null;
+            }
             if (($userid == $USER->id) && !$profile) {
                 $url = new moodle_url('mybadges.php', array('download' => $badge->id, 'hash' => $badge->uniquehash, 'sesskey' => sesskey()));
                 $notexpiredbadge = (empty($badge->dateexpire) || $badge->dateexpire > time());
@@ -336,6 +346,9 @@ class badgemaker_renderer extends core_badges_renderer {
                 }
             }
 
+            if (empty($profile)) {
+              $profile = null;
+            }
             if (!$profile) {
                 $url = new moodle_url('/badges/badge.php', array('hash' => $badge->uniquehash));
             } else {
@@ -352,6 +365,10 @@ class badgemaker_renderer extends core_badges_renderer {
 
           $actions = html_writer::tag('div', $push . $download . $status, array('class' => 'badge-actions'));
           $items[] = html_writer::link($url, $image . $actions . $name, array('title' => $bname));
+      }
+
+      if ($items == null) {
+        $items = array();
       }
 
       return html_writer::alist($items, array('class' => 'badges'));
