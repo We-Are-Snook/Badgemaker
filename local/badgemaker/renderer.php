@@ -836,9 +836,9 @@ class badgemaker_renderer extends core_badges_renderer {
         $html .= html_writer::end_div();
 
          $searchform = $this->helper_search_form($badges->search);
-         // $html .= "<div style=\"float: left;\">";
+        //  $html .= "<div style=\"float: left;\">";
          $html .= $searchform;
-         // $html .= "</div>";
+        //  $html .= "</div>";
 
         return $html;
     }

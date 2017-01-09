@@ -195,9 +195,17 @@ $badges->perpage    = $badgesPerPage;
 $badges->totalcount = $totalcount;
 $badges->search     = $search;
 
+  if (!empty($search)) {
+    $realtotal = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0);
+    $realTotalCount = count($realtotal);
+    $libhead = "$totalcount matching badges out of $realTotalCount total badges";
+  } else {
+    $libhead = "$totalcount badges";
+  }
+
     //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
 
-    echo $output->library_heading($totalcount . ' badges', $viewmode, null, $badges);
+    echo $output->library_heading($libhead, $viewmode, null, $badges);
     //echo $output->heading('All badges available on this site');
     // echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
 
