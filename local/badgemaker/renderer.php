@@ -51,7 +51,7 @@ class badgemaker_renderer extends core_badges_renderer {
 
           $download = $status = $push = '';
           if (($userid == $USER->id) && !$profile) {
-              $url = new moodle_url('mybadges.php', array('download' => $badge->id, 'hash' => $badge->uniquehash, 'sesskey' => sesskey()));
+              $url = new moodle_url('my.php', array('download' => $badge->id, 'hash' => $badge->uniquehash, 'sesskey' => sesskey()));
               $notexpiredbadge = (empty($badge->dateexpire) || $badge->dateexpire > time());
               $backpackexists = badges_user_has_backpack($USER->id);
               if (!empty($CFG->badges_allowexternalbackpack) && $notexpiredbadge && $backpackexists) {
@@ -62,10 +62,10 @@ class badgemaker_renderer extends core_badges_renderer {
 
               $download = $this->output->action_icon($url, new pix_icon('t/download', get_string('download')));
               if ($badge->visible) {
-                  $url = new moodle_url('mybadges.php', array('hide' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $url = new moodle_url('my.php', array('hide' => $badge->issuedid, 'sesskey' => sesskey()));
                   $status = $this->output->action_icon($url, new pix_icon('t/hide', get_string('makeprivate', 'badges')));
               } else {
-                  $url = new moodle_url('mybadges.php', array('show' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $url = new moodle_url('my.php', array('show' => $badge->issuedid, 'sesskey' => sesskey()));
                   $status = $this->output->action_icon($url, new pix_icon('t/show', get_string('makepublic', 'badges')));
               }
           }
