@@ -11,7 +11,7 @@ require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(dirname(__FILE__)).'/renderer.php');
 require_once(dirname(dirname(__FILE__)).'/lib.php');
 
-$path =  '/local/badgemaker/library/mynew.php';
+$path =  '/local/badgemaker/library/my.php';
 
 $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
 $courseid   = 0;//optional_param('id', 0, PARAM_INT);
@@ -154,6 +154,6 @@ $userbadges->perpage = $badgesPerPage;//BADGE_PERPAGE;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
 
-echo $output->render_badge_user_collection2($userbadges);
+echo $output->render($userbadges);
 
 echo $OUTPUT->footer();

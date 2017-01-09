@@ -154,6 +154,6 @@ $userbadges->perpage = $badgesPerPage;//BADGE_PERPAGE;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
 
-echo $output->render($userbadges);
+echo $output->render_badge_user_collection2($userbadges);
 
 echo $OUTPUT->footer();

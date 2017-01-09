@@ -110,43 +110,43 @@ class badgemaker_renderer extends core_badges_renderer {
 
       // Local badges.
       $localhtml = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
-      $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
-      $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
+      // $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
+      // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
       if ($badges->badges) {
           $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
           $downloadbutton .= $downloadall;
 
           $htmllist = $this->print_badgemaker_badges_list($badges->badges, $USER->id);
-          $localhtml .= $backpackconnect . $downloadbutton . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
+          $localhtml .= $downloadbutton . $backpackconnect . html_writer::tag('br', '') . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
       $localhtml .= html_writer::end_tag('div');
 
       // External badges.
-      $externalhtml = "";
-      if (!empty($CFG->badges_allowexternalbackpack)) {
-          $externalhtml .= html_writer::start_tag('div', array('class' => 'generalbox'));
-          $externalhtml .= $this->output->heading_with_help(get_string('externalbadges', 'badges'), 'externalbadges', 'badges');
-          if (!is_null($backpack)) {
-              if ($backpack->totalcollections == 0) {
-                  $externalhtml .= get_string('nobackpackcollections', 'badges', $backpack);
-              } else {
-                  if ($backpack->totalbadges == 0) {
-                      $externalhtml .= get_string('nobackpackbadges', 'badges', $backpack);
-                  } else {
-                      $externalhtml .= get_string('backpackbadges', 'badges', $backpack);
-                      $externalhtml .= '<br/><br/>' . $this->print_badgemaker_badges_list($backpack->badges, $USER->id, true, true);
-                  }
-              }
-          } else {
-              $externalhtml .= get_string('externalconnectto', 'badges', $mybackpack->out());
-          }
+      // $externalhtml = "";
+      // if (!empty($CFG->badges_allowexternalbackpack)) {
+      //     $externalhtml .= html_writer::start_tag('div', array('class' => 'generalbox'));
+      //     $externalhtml .= $this->output->heading_with_help(get_string('externalbadges', 'badges'), 'externalbadges', 'badges');
+      //     if (!is_null($backpack)) {
+      //         if ($backpack->totalcollections == 0) {
+      //             $externalhtml .= get_string('nobackpackcollections', 'badges', $backpack);
+      //         } else {
+      //             if ($backpack->totalbadges == 0) {
+      //                 $externalhtml .= get_string('nobackpackbadges', 'badges', $backpack);
+      //             } else {
+      //                 $externalhtml .= get_string('backpackbadges', 'badges', $backpack);
+      //                 $externalhtml .= '<br/><br/>' . $this->print_badgemaker_badges_list($backpack->badges, $USER->id, true, true);
+      //             }
+      //         }
+      //     } else {
+      //         $externalhtml .= get_string('externalconnectto', 'badges', $mybackpack->out());
+      //     }
+      //
+      //     $externalhtml .= html_writer::end_tag('div');
+      // }
 
-          $externalhtml .= html_writer::end_tag('div');
-      }
-
-      return $localhtml . $externalhtml;
+      return $localhtml;// . $externalhtml;
   }
 
     // A combo of render_badge_user_collection and the table from render_badge_management
