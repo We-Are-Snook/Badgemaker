@@ -341,6 +341,11 @@ class badgemaker_renderer extends core_badges_renderer {
             // MH get_string('actions')
         );
 
+        // MB The class of the column determines justification, let's try status when we want centered and name when we want left
+        // $justifyCenterClass = 'status';
+        // $justifyLeftClass = 'name';
+        // $justifyClass = $justifyLeftClass;
+
         $table->colclasses = array('name'); // MH $table->colclasses = array('name', 'status', 'criteria', 'awards', 'actions');
         // MH
         if (has_capability('moodle/badges:createbadge', $this->page->context)) {
