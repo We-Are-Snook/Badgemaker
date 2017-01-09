@@ -24,3 +24,5 @@ $string['all_badges'] = 'All badges';
 $string['course_and_site_badges'] = 'Course and site badges';
 $string['course_badges'] = 'Course badges';
 $string['site_badges'] = 'Site badges';
+$string['total_badges'] = "total badges";
+$string['matching_badges_out_of'] = "matching badges out of";

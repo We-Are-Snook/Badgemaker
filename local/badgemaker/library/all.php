@@ -198,9 +198,9 @@ $badges->search     = $search;
   if (!empty($search)) {
     $realtotal = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0);
     $realTotalCount = count($realtotal);
-    $libhead = "$totalcount matching badges out of $realTotalCount total badges";
+    $libhead = "$totalcount ".get_string('matching_badges_out_of', 'local_badgemaker')." $realTotalCount ".get_string('total_badges', 'local_badgemaker');
   } else {
-    $libhead = "$totalcount badges";
+    $libhead = "$totalcount ".get_string('total_badges', 'local_badgemaker');
   }
 
     //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
