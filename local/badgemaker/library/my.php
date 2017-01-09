@@ -35,7 +35,7 @@ $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
 //disable paging because we are showing two tables.
-$badgesPerPage = PHP_INT_MAX; // BADGE_PERPAGE
+$badgesPerPage = 5;//PHP_INT_MAX; // BADGE_PERPAGE
 
 if (!in_array($sortby, array('name', 'status'))) {
     $sortby = 'name';
@@ -127,7 +127,7 @@ require_capability('moodle/badges:manageownbadges', $context);
 // echo $OUTPUT->heading_with_help($title, 'localbadgesh', 'badges');
 
 // we will use these params if decide to persist search term between tabs.
-//$params = array('page' => $page);
+$params = array('page' => $page);
 //if ($contextid) {
 //    $params['contextid'] = $contextid;
 //}
@@ -137,20 +137,20 @@ require_capability('moodle/badges:manageownbadges', $context);
 //if ($showall) {
 //    $params['showall'] = true;
 //}
-$baseurl = new moodle_url($path);
+$baseurl = new moodle_url($path, $params);
 
 if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);
 }
 
-$records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, $page, $badgesPerPage, $USER->id, $search);//badges_get_user_badges($USER->id, null, $page, $badgesPerPage, $search);
+$records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);//badges_get_user_badges($USER->id, null, $page, $badgesPerPage, $search);
 $totalcount = count($records);
 
 $userbadges = new badge_user_collection($records, $USER->id);
 $userbadges->sort = $sortby; //'dateissued';
 $userbadges->dir = $sorthow; //'DESC';
 $userbadges->page = $page;
-$userbadges->perpage = $badgesPerPage;//BADGE_PERPAGE;
+$userbadges->perpage = 10;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
 

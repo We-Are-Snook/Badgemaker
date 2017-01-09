@@ -93,6 +93,7 @@ class badgemaker_renderer extends core_badges_renderer {
       $mybackpack = new moodle_url('/badges/mybackpack.php');
 
       $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
+      // die("There are $badges->totalcount that should be shown $badges->perpage per page and we want page $badges->page now");
       $htmlpagingbar = $this->render($paging);
 
       // Set backpack connection string.
@@ -112,11 +113,14 @@ class badgemaker_renderer extends core_badges_renderer {
       $localhtml = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
       // $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
       // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
-      if ($badges->badges) {
+
+      $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
+
+      if (count($pageBadges) > 0) {
           $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
           $downloadbutton .= $downloadall;
 
-          $htmllist = $this->print_badgemaker_badges_list($badges->badges, $USER->id);
+          $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
           $localhtml .= $downloadbutton . $backpackconnect . html_writer::tag('br', '') . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
