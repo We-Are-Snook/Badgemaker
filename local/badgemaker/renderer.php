@@ -788,12 +788,13 @@ class badgemaker_renderer extends core_badges_renderer {
 
         $html = html_writer::start_div('clearfix');
 
+        if (!empty($heading)) {
+          $html .= $this->output->heading($heading, 4);
+          // $html .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges', '', '', 4);
+         }
+
         // $html = html_writer::start_div('libheading');
         // $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
-        $searchform = $this->helper_search_form($badges->search);
-        $html .= "<div style=\"float: left;\">";
-        $html .= $searchform;
-        $html .= "</div>";
         // if (!empty($heading)) {
         //     // $html .= $this->heading($heading);
         //     $html .= "<div style=\"float: left;\">";
@@ -833,10 +834,12 @@ class badgemaker_renderer extends core_badges_renderer {
         }
         $html .= '<div style="clear: both;"></div>';
         $html .= html_writer::end_div();
-        if (!empty($heading)) {
-          $html .= $this->output->heading($heading, 4);
-          // $html .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges', '', '', 4);
-         }
+
+         $searchform = $this->helper_search_form($badges->search);
+         // $html .= "<div style=\"float: left;\">";
+         $html .= $searchform;
+         // $html .= "</div>";
+
         return $html;
     }
 }
