@@ -15,6 +15,140 @@ require_once($CFG->dirroot . "/badges/renderer.php");
  */
 class badgemaker_renderer extends core_badges_renderer {
 
+  public function print_badgemaker_badges_list($badges, $userid, $profile = false, $external = false) {
+      global $USER, $CFG;
+      foreach ($badges as $badge) {
+          if (!$external) {
+              $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
+              $bname = $badge->name;
+              $imageurl = moodle_url::make_pluginfile_url($context->id, 'badges', 'badgeimage', $badge->id, '/', 'f1', false);
+          } else {
+              $bname = s($badge->assertion->badge->name);
+              $imageurl = $badge->imageUrl;
+          }
+
+          $name = html_writer::tag('span', $bname, array('class' => 'badge-name'));
+
+          $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'badge-image'));
+          if (!empty($badge->dateexpire) && $badge->dateexpire < time()) {
+              $image .= $this->output->pix_icon('i/expired',
+                      get_string('expireddate', 'badges', userdate($badge->dateexpire)),
+                      'moodle',
+                      array('class' => 'expireimage'));
+              $name .= '(' . get_string('expired', 'badges') . ')';
+          }
+
+          $courseAndDate = '<br>';
+          // var_dump($badge);die();
+          if ($badge->courseid > 0) {
+            $coursename = $badge->courseFullname;
+            $courseAndDate .= html_writer::tag('span', $coursename, array('class' => 'course-name')).'<br>';
+          }
+
+          $awarddate = $badge->dateissued;
+          $awarddate = userdate($awarddate, '%d %B %Y');
+          $courseAndDate .= html_writer::tag('span', $awarddate, array('class' => 'award-date'));
+
+          $download = $status = $push = '';
+          if (($userid == $USER->id) && !$profile) {
+              $url = new moodle_url('mybadges.php', array('download' => $badge->id, 'hash' => $badge->uniquehash, 'sesskey' => sesskey()));
+              $notexpiredbadge = (empty($badge->dateexpire) || $badge->dateexpire > time());
+              $backpackexists = badges_user_has_backpack($USER->id);
+              if (!empty($CFG->badges_allowexternalbackpack) && $notexpiredbadge && $backpackexists) {
+                  $assertion = new moodle_url('/badges/assertion.php', array('b' => $badge->uniquehash));
+                  $action = new component_action('click', 'addtobackpack', array('assertion' => $assertion->out(false)));
+                  $push = $this->output->action_icon(new moodle_url('#'), new pix_icon('t/backpack', get_string('addtobackpack', 'badges')), $action);
+              }
+
+              $download = $this->output->action_icon($url, new pix_icon('t/download', get_string('download')));
+              if ($badge->visible) {
+                  $url = new moodle_url('mybadges.php', array('hide' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $status = $this->output->action_icon($url, new pix_icon('t/hide', get_string('makeprivate', 'badges')));
+              } else {
+                  $url = new moodle_url('mybadges.php', array('show' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $status = $this->output->action_icon($url, new pix_icon('t/show', get_string('makepublic', 'badges')));
+              }
+          }
+
+          if (!$profile) {
+              $url = new moodle_url('/badges/badge.php', array('hash' => $badge->uniquehash));
+          } else {
+              if (!$external) {
+                  $url = new moodle_url('/badges/badge.php', array('hash' => $badge->uniquehash));
+              } else {
+                  $hash = hash('md5', $badge->hostedUrl);
+                  $url = new moodle_url('/badges/external.php', array('hash' => $hash, 'user' => $userid));
+              }
+          }
+          $actions = html_writer::tag('div', $push . $download . $status, array('class' => 'badge-actions'));
+          $items[] = html_writer::link($url, $name . $image . $courseAndDate . $actions, array('title' => $bname));
+      }
+
+      return html_writer::alist($items, array('class' => 'badges'));
+  }
+
+  public function render_badge_user_collection2(badge_user_collection $badges) {
+      global $CFG, $USER, $SITE;
+      $backpack = $badges->backpack;
+      $mybackpack = new moodle_url('/badges/mybackpack.php');
+
+      $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
+      $htmlpagingbar = $this->render($paging);
+
+      // Set backpack connection string.
+      $backpackconnect = '';
+      if (!empty($CFG->badges_allowexternalbackpack) && is_null($backpack)) {
+          $backpackconnect = $this->output->box(get_string('localconnectto', 'badges', $mybackpack->out()), 'noticebox');
+      }
+      // Search box.
+      $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+
+      // Download all button.
+      $downloadall = $this->output->single_button(
+                  new moodle_url('/badges/mybadges.php', array('downloadall' => true, 'sesskey' => sesskey())),
+                  get_string('downloadall'), 'POST', array('class' => 'activatebadge'));
+
+      // Local badges.
+      $localhtml = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
+      $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
+      $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
+      if ($badges->badges) {
+          $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
+          $downloadbutton .= $downloadall;
+
+          $htmllist = $this->print_badgemaker_badges_list($badges->badges, $USER->id);
+          $localhtml .= $backpackconnect . $downloadbutton . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
+      } else {
+          $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
+      }
+      $localhtml .= html_writer::end_tag('div');
+
+      // External badges.
+      $externalhtml = "";
+      if (!empty($CFG->badges_allowexternalbackpack)) {
+          $externalhtml .= html_writer::start_tag('div', array('class' => 'generalbox'));
+          $externalhtml .= $this->output->heading_with_help(get_string('externalbadges', 'badges'), 'externalbadges', 'badges');
+          if (!is_null($backpack)) {
+              if ($backpack->totalcollections == 0) {
+                  $externalhtml .= get_string('nobackpackcollections', 'badges', $backpack);
+              } else {
+                  if ($backpack->totalbadges == 0) {
+                      $externalhtml .= get_string('nobackpackbadges', 'badges', $backpack);
+                  } else {
+                      $externalhtml .= get_string('backpackbadges', 'badges', $backpack);
+                      $externalhtml .= '<br/><br/>' . $this->print_badgemaker_badges_list($backpack->badges, $USER->id, true, true);
+                  }
+              }
+          } else {
+              $externalhtml .= get_string('externalconnectto', 'badges', $mybackpack->out());
+          }
+
+          $externalhtml .= html_writer::end_tag('div');
+      }
+
+      return $localhtml . $externalhtml;
+  }
+
     // A combo of render_badge_user_collection and the table from render_badge_management
     // Search box is moved above heading so it is obvious it is for both tables in the badge library.
     protected function render_badge_user_collection(badge_user_collection $badges)
