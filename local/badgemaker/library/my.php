@@ -13,9 +13,8 @@ require_once(dirname(dirname(__FILE__)).'/lib.php');
 
 $path =  '/local/badgemaker/library/my.php';
 
-$type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
-$courseid   = 0;//optional_param('id', 0, PARAM_INT);
-$page       = 0;//optional_param('page', 0, PARAM_INT);
+// $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
+// $courseid   = 0;//optional_param('id', 0, PARAM_INT);
 $deactivate = optional_param('lock', 0, PARAM_INT);
 $sortby     = optional_param('sort', 'name', PARAM_ALPHA);
 $sorthow    = optional_param('dir', 'ASC', PARAM_ALPHA);
@@ -34,8 +33,7 @@ $hash        = optional_param('hash', '', PARAM_ALPHANUM);
 $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
-//disable paging because we are showing two tables.
-$badgesPerPage = 5;//PHP_INT_MAX; // BADGE_PERPAGE
+$badgesPerPage = 10;
 
 if (!in_array($sortby, array('name', 'status'))) {
     $sortby = 'name';
@@ -63,16 +61,6 @@ if($sortby !== 'name'){
 if($search !== ''){
     $url->param('search', $search);
 }
-//if($viewmode !== 'default'){
-//    $url->param('view', $viewmode);
-//}
-
-if ($course = $DB->get_record('course', array('id' => $courseid))) {
-    //$url->param('type', $type);
-    $url->param('id', $course->id);
-} else {
-    //$url->param('type', $type);
-}
 
 $PAGE->set_url($url);
 
@@ -81,7 +69,6 @@ $title = get_string('badge_library', 'local_badgemaker') . ': ' . get_string('my
 $PAGE->set_title($title);
 $PAGE->set_pagelayout('admin');
 // $PAGE->set_heading($title);
-//navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 
 $PAGE->requires->js('/badges/backpack.js');
 $PAGE->requires->js_init_call('check_site_access', null, false);
@@ -143,14 +130,14 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);
 }
 
-$records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);//badges_get_user_badges($USER->id, null, $page, $badgesPerPage, $search);
+$records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
 $totalcount = count($records);
 
 $userbadges = new badge_user_collection($records, $USER->id);
 $userbadges->sort = $sortby; //'dateissued';
 $userbadges->dir = $sorthow; //'DESC';
 $userbadges->page = $page;
-$userbadges->perpage = 10;
+$userbadges->perpage = $badgesPerPage;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
 
