@@ -73,6 +73,9 @@ $PAGE->set_pagelayout('admin');
 $PAGE->requires->js('/badges/backpack.js');
 $PAGE->requires->js_init_call('check_site_access', null, false);
 
+// We need our own CSS for the badge list now...
+$PAGE->requires->css('/local/badgemaker/style/badgemaker.css');
+
 /* My Badge Actions */
 $output = new badgemaker_renderer($PAGE, '');
 

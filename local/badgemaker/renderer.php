@@ -26,8 +26,7 @@ class badgemaker_renderer extends core_badges_renderer {
               $bname = s($badge->assertion->badge->name);
               $imageurl = $badge->imageUrl;
           }
-
-          $name = html_writer::tag('span', $bname, array('class' => 'badge-name'));
+          $name = html_writer::tag('span', $bname, array('class' => 'badge-name-badgemaker-list'));
 
           $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'badge-image'));
           if (!empty($badge->dateexpire) && $badge->dateexpire < time()) {
