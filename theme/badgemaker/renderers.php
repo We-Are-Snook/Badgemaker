@@ -21,7 +21,10 @@ class theme_badgemaker_core_badges_renderer extends core_badges_renderer {
     $output = '';
     $output .= html_writer::start_tag('div', array('id' => 'badge'));
     $output .= html_writer::start_tag('div', array('id' => 'badge-image'));
-    $output .= html_writer::empty_tag('img', array('src' => $badgeclass['image'], 'alt' => $badge->name));
+    $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
+    $displayurl = new moodle_url("/local/badgemaker/badgeimage/display.php?bci=$context->id&bid=$badge->id");
+    // $output .= html_writer::empty_tag('img', array('src' => $badgeclass['image'], 'alt' => $badge->name));
+    $output .= html_writer::empty_tag('img', array('src' => $displayurl, 'alt' => $badge->name, 'width' => '100px'));
     // var_dump($badgeclass['image']);die();
 
     // This is how you get a handle to the raw file with the larger image in it...
