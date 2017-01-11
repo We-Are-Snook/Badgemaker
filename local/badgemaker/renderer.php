@@ -22,6 +22,8 @@ class badgemaker_renderer extends core_badges_renderer {
               $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
               $bname = $badge->name;
               $imageurl = moodle_url::make_pluginfile_url($context->id, 'badges', 'badgeimage', $badge->id, '/', 'f1', false);
+              $displayurl = new moodle_url("/local/badgemaker/badgeimage/display.php?bci=$context->id&bid=$badge->id");
+              $imageurl = $displayurl;
           } else {
               $bname = s($badge->assertion->badge->name);
               $imageurl = $badge->imageUrl;
