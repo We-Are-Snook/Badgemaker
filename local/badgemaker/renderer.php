@@ -792,7 +792,7 @@ class badgemaker_renderer extends core_badges_renderer {
 
 
     /**
-     * Displays a heading for the management pages.
+     * Taken from management_heading() in management_renderer.php
      *
      * @param string $heading The heading to display
      * @param string|null $viewmode The current view mode if there are options.
@@ -802,11 +802,12 @@ class badgemaker_renderer extends core_badges_renderer {
     public function library_heading($heading, $viewmode = null, $categoryid = null, $badges) { // copy of management_heading
         global $PAGE;
 
-        $html = html_writer::start_div('clearfix');
+        $html = html_writer::start_div('coursecat-management-header clearfix'); // coursecat-management-header needed to make heading on same line.
 
         if (!empty($heading)) {
-          $html .= $this->output->heading($heading, 4);
+         // $html .= $this->output->heading($heading, 4);
           // $html .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges', '', '', 4);
+            $html .= $this->output->heading($heading);
          }
 
         // $html = html_writer::start_div('libheading');

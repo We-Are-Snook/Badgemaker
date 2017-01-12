@@ -40,6 +40,8 @@ $badgesPerPage = 2;//; // Where did this constant come from?  I don't see it.
 // drop down taken from course/management.php
 $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of default, course or site.
 
+
+/* constrain params to only valid values */
 if (!in_array($sortby, array('name', 'status', 'course', 'recipients'))) {
     $sortby = 'name';
 }
@@ -60,6 +62,9 @@ require_login();
 
 $err = '';
 
+
+/* Rebuild a URL with only valid parameters */
+/* This one will be modified or added to by any filtering actions */
 $url = new moodle_url($path); // '/badges/index.php'
 
 if($sorthow !== 'ASC'){
@@ -84,6 +89,7 @@ if ($course = $DB->get_record('course', array('id' => $courseid))) {
     //$url->param('type', $type);
 }
 
+// allows the URL to be accessed by the lib and renderer
 $PAGE->set_url($url);
 
 $PAGE->set_context(context_system::instance());
@@ -94,12 +100,10 @@ $PAGE->set_pagelayout('admin');
 //navigation_node::override_active_url(new moodle_url($path, array('type' => BADGE_TYPE_SITE)), true); // '/badges/index.php
 navigation_node::override_active_url(local_badgemaker_libraryPageURL());
 
-
-
 $PAGE->requires->js('/badges/backpack.js');
 $PAGE->requires->js_init_call('check_site_access', null, false);
 
-/* Site Badge Actions */
+/* Site Badge Actions - that were posted to this page from a previous click on an action in the table */
 $output = $PAGE->get_renderer('core', 'badges');
 if (($delete || $archive) && has_capability('moodle/badges:deletebadge', $PAGE->context)) {
     $badgeid = ($archive != 0) ? $archive : $delete;
@@ -195,37 +199,36 @@ $badges->perpage    = $badgesPerPage;
 $badges->totalcount = $totalcount;
 $badges->search     = $search;
 
-  if (!empty($search)) {
+if (!empty($search)) {
     $realtotal = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0);
     $realTotalCount = count($realtotal);
     $libhead = "$totalcount ".get_string('matching_badges_out_of', 'local_badgemaker')." $realTotalCount ".get_string('total_badges', 'local_badgemaker');
-  } else {
+} else {
     $libhead = "$totalcount ".get_string('total_badges', 'local_badgemaker');
-  }
+}
 
-    //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
+//$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
 
-    echo $output->library_heading($libhead, $viewmode, null, $badges);
-    //echo $output->heading('All badges available on this site');
-    // echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
+echo $output->library_heading($libhead, $viewmode, null, $badges);
+//echo $output->heading('All badges available on this site');
+// echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
 
-    if ($course && $course->startdate > time()) {
-        echo $OUTPUT->box(get_string('error:notifycoursedate', 'badges'), 'generalbox notifyproblem');
-    }
+if ($course && $course->startdate > time()) {
+    echo $OUTPUT->box(get_string('error:notifycoursedate', 'badges'), 'generalbox notifyproblem');
+}
 
-    if ($err !== '') {
-        echo $OUTPUT->notification($err, 'notifyproblem');
-    }
+if ($err !== '') {
+    echo $OUTPUT->notification($err, 'notifyproblem');
+}
 
-    if ($msg !== '') {
-        echo $OUTPUT->notification(get_string($msg, 'badges'), 'notifysuccess');
-    }
+if ($msg !== '') {
+    echo $OUTPUT->notification(get_string($msg, 'badges'), 'notifysuccess');
+}
 
 
+// die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
 
-    // die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
-
-    echo $output->render($badges); // also outputs add new badge button.
+echo $output->render($badges); // also outputs add new badge button.
 
 
 if (!$totalcount) {
