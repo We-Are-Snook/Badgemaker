@@ -35,12 +35,12 @@ $hash        = optional_param('hash', '', PARAM_ALPHANUM);
 $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
-$badgesPerPage = 10;//BADGE_PERPAGE; // Where did this constant come from?  I don't see it.
+$badgesPerPage = 2;//; // Where did this constant come from?  I don't see it.
 
 // drop down taken from course/management.php
 $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of default, course or site.
 
-if (!in_array($sortby, array('name', 'status'))) {
+if (!in_array($sortby, array('name', 'status', 'course', 'recipients'))) {
     $sortby = 'name';
 }
 

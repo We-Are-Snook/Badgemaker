@@ -310,6 +310,7 @@ global $CFG;
    return $displayBadges;
  }
 
+ // used by block_badgemaker_badges_get_badges
  function local_badgemaker_badges_get_badges($type = 0, $courseid = 0, $sort = '', $dir = '', $page = 0, $perpage = BADGE_PERPAGE, $user = 0) {
      global $DB;
      $records = array();
@@ -641,8 +642,9 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
     // MH
     $usersql .= " LEFT JOIN {course} c on c.id = b.courseid";
     $userfields[] = 'c.fullname';
-
-
+    if($sort = 'course'){
+        $sort = 'c.fullname';
+    }
 
     $fields = implode(', ', $userfields);
 
@@ -650,6 +652,7 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
         $where .= "AND b.courseid = :courseid ";
         $params['courseid'] = $courseid;
     }
+
 
     $sorting = (($sort != '' && $dir != '') ? 'ORDER BY ' . $sort . ' ' . $dir : '');
     $params['type'] = $type;

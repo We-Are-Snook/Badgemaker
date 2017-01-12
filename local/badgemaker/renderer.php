@@ -333,7 +333,11 @@ class badgemaker_renderer extends core_badges_renderer {
         $sortbyname = $this->helper_sortable_heading(get_string('name'),
             'name', $badges->sort, $badges->dir);
         $sortbystatus = $this->helper_sortable_heading(get_string('status', 'badges'),
-            'status', $badges->sort, $badges->dir);
+              'status', $badges->sort, $badges->dir);
+        $sortbycourse = $this->helper_sortable_heading(get_string('course', 'moodle'),
+              'course', $badges->sort, $badges->dir); // MH
+        $sortbyrecipients = $this->helper_sortable_heading(get_string('awards', 'badges'),
+              'recipients', $badges->sort, $badges->dir); // MH recipients
         $table->head = array(
             $sortbyname,
             // MH $sortbystatus,
@@ -354,9 +358,11 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->head[] = $sortbystatus;
         }
         $table->colclasses[] = 'course';
-        $table->head[] = get_string('course', 'moodle');
-        $table->colclasses[] = 'awards';
-        $table->head[] = get_string('awards', 'badges');
+        $table->head[] = $sortbycourse;
+
+        $table->colclasses[] = 'awards'; // recipients
+        $table->head[] = $sortbyrecipients;
+
         if($this->has_any_action_capability()){
           $actionhead = get_string('actions');
             $table->head[] = $actionhead;//$this->output->heading_with_help($actionhead, '', '', '', '', 5);
