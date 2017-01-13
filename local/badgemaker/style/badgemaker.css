@@ -3,3 +3,52 @@
     padding: 5px;
     font-weight: bold;
 }
+
+
+
+table.collection
+.badgemaker-name {
+    text-align: left;
+    vertical-align: middle
+}
+
+table.collection
+.badgemaker-awards {
+    /*width: 10%;*/
+    text-align: left;
+    vertical-align: middle
+}
+
+table.collection
+.badgemaker-course {
+    /*width: 40%;*/
+    text-align: left;
+    vertical-align: middle
+}
+
+table.collection
+.badgemaker-criteria {
+    width: 40%;
+    text-align: left;
+    vertical-align: middle
+}
+
+table.collection .badgeimage, table.collection
+.badgemaker-status {
+    /*width: 15%;*/
+    text-align: left;
+    vertical-align: middle
+}
+
+table.collection
+.badgemaker-description {
+    /*width: 25%;*/
+    text-align: left
+}
+
+table.collection
+.badgemaker-actions {
+    /*width: 11em;*/
+    text-align: left;
+    vertical-align: middle
+}

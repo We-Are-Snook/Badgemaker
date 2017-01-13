@@ -351,22 +351,22 @@ class badgemaker_renderer extends core_badges_renderer {
         // $justifyLeftClass = 'name';
         // $justifyClass = $justifyLeftClass;
 
-        $table->colclasses = array('name'); // MH $table->colclasses = array('name', 'status', 'criteria', 'awards', 'actions');
+        $table->colclasses = array('badgemaker-name'); // MH $table->colclasses = array('name', 'status', 'criteria', 'awards', 'actions');
         // MH
         if (has_capability('moodle/badges:createbadge', $this->page->context)) {
-            $table->colclasses[] = 'status';
+            $table->colclasses[] = 'badgemaker-status';
             $table->head[] = $sortbystatus;
         }
-        $table->colclasses[] = 'course';
+        $table->colclasses[] = 'badgemaker-course';
         $table->head[] = $sortbycourse;
 
-        $table->colclasses[] = 'awards'; // recipients
+        $table->colclasses[] = 'badgemaker-awards'; // recipients
         $table->head[] = $sortbyrecipients;
 
         if($this->has_any_action_capability()){
           $actionhead = get_string('actions');
-            $table->head[] = $actionhead;//$this->output->heading_with_help($actionhead, '', '', '', '', 5);
-            $table->colclasses[] = get_string('actions');
+            $table->head[] = $actionhead;
+            $table->colclasses[] = 'badgemaker-actions';//get_string('actions');
         }
 
         $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);

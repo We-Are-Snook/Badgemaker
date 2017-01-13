@@ -103,6 +103,9 @@ navigation_node::override_active_url(local_badgemaker_libraryPageURL());
 $PAGE->requires->js('/badges/backpack.js');
 $PAGE->requires->js_init_call('check_site_access', null, false);
 
+// own css used for table...
+$PAGE->requires->css('/local/badgemaker/style/badgemaker.css');
+
 /* Site Badge Actions - that were posted to this page from a previous click on an action in the table */
 $output = $PAGE->get_renderer('core', 'badges');
 if (($delete || $archive) && has_capability('moodle/badges:deletebadge', $PAGE->context)) {
