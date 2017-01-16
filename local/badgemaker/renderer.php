@@ -96,6 +96,9 @@ class badgemaker_renderer extends core_badges_renderer {
       $backpack = $badges->backpack;
       $mybackpack = new moodle_url('/badges/mybackpack.php');
 
+      $breakTag = html_writer::tag('br', '');
+
+
       $bmLogo = badgemaker_badgemaker_logo_with_link();
 
       $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
@@ -105,7 +108,7 @@ class badgemaker_renderer extends core_badges_renderer {
       // Set backpack connection string.
       $backpackconnect = '';
       if (!empty($CFG->badges_allowexternalbackpack) && is_null($backpack)) {
-          $backpackconnect = $this->output->box(get_string('localconnectto', 'badges', $mybackpack->out()), 'noticebox');
+          $backpackconnect = $this->output->box(get_string('localconnectto', 'badges', $mybackpack->out()), 'noticebox') . $breakTag;
       }
       // Search box.
       $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxalignleft');
@@ -131,12 +134,11 @@ class badgemaker_renderer extends core_badges_renderer {
             $subheading = $this->output->heading($bes . $downloadall, 2, 'activatebadge');
         } else {
 
-          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount . $downloadall, 2, 'activatebadge');
+          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount . ' ' . $downloadall, 2, 'activatebadge');
         }
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $breakTag = html_writer::tag('br', '');
-          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $breakTag . $searchform . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
+          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
