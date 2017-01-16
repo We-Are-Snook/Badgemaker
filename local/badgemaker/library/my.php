@@ -134,6 +134,11 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 }
 
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
+if (empty($search)) {
+  $withoutSearchCount = -1;
+} else {
+  $withoutSearchCount = count(local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id));
+}
 $totalcount = count($records);
 
 $userbadges = new badge_user_collection($records, $USER->id);
@@ -144,6 +149,6 @@ $userbadges->perpage = $badgesPerPage;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
 
-echo $output->render_badge_user_collection2($userbadges);
+echo $output->badgemaker_render_badge_user_collection($userbadges, $withoutSearchCount);
 
 echo $OUTPUT->footer();

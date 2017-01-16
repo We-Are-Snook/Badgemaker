@@ -88,7 +88,7 @@ class badgemaker_renderer extends core_badges_renderer {
       return html_writer::alist($items, array('class' => 'badges'));
   }
 
-  public function render_badge_user_collection2(badge_user_collection $badges) {
+  public function badgemaker_render_badge_user_collection(badge_user_collection $badges, $totalBadgeCount = -1) {
       global $CFG, $USER, $SITE;
       $backpack = $badges->backpack;
       $mybackpack = new moodle_url('/badges/mybackpack.php');
@@ -116,13 +116,20 @@ class badgemaker_renderer extends core_badges_renderer {
       // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
 
       $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
+      $allBadgesCount = count($badges->badges);
 
-      if (count($pageBadges) > 0) {
-          $downloadbutton = $this->output->heading(get_string('badgesearned', 'badges', $badges->totalcount), 4, 'activatebadge');
-          $downloadbutton .= $downloadall;
+      if ($allBadgesCount > 0 || $totalBadgeCount > 0) {
+          if ($totalBadgeCount < 0) {
+            $bes = "$allBadgesCount " . get_string('badges_earned_heading', 'local_badgemaker');
+            $subheading = $this->output->heading($bes, 2, 'activatebadge');
+        } else {
+
+          $subheading = $this->output->heading("".count($pageBadges)." matching badges out of $totalBadgeCount", 4, 'activatebadge');
+        }
+          $downloadbutton = $downloadall;
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $downloadbutton . $backpackconnect . html_writer::tag('br', '') . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
+          $localhtml .= $subheading . $downloadbutton . $backpackconnect . html_writer::tag('br', '') . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
