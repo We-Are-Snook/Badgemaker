@@ -35,6 +35,10 @@ $show        = optional_param('show', 0, PARAM_INT);
 
 $badgesPerPage = 10;
 
+if ($clearsearch) {
+    $search = '';
+}
+
 if (!in_array($sortby, array('name', 'status'))) {
     $sortby = 'name';
 }
@@ -79,9 +83,6 @@ $PAGE->requires->css('/local/badgemaker/style/badgemaker.css');
 /* My Badge Actions */
 $output = new badgemaker_renderer($PAGE, '');
 
-if ($clearsearch) {
-    $search = '';
-}
 if ($hide) {
     require_sesskey();
     $DB->set_field('badge_issued', 'visible', 0, array('id' => $hide, 'userid' => $USER->id));
@@ -134,9 +135,12 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 }
 
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
+
 if (empty($search)) {
+  // echo "EMPTY SEARCH";
   $withoutSearchCount = -1;
 } else {
+  // echo "SEARCH ACTIVE";
   $withoutSearchCount = count(local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id));
 }
 $totalcount = count($records);

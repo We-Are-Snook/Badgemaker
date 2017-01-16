@@ -85,6 +85,9 @@ class badgemaker_renderer extends core_badges_renderer {
           $items[] = html_writer::link($url, $name . $image . $courseAndDate . $actions, array('title' => $bname));
       }
 
+      if (empty($items)) {
+        $items = array();
+      }
       return html_writer::alist($items, array('class' => 'badges'));
   }
 
