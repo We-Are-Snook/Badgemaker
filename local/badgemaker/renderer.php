@@ -127,7 +127,7 @@ class badgemaker_renderer extends core_badges_renderer {
             $subheading = $this->output->heading($bes, 2, 'activatebadge');
         } else {
 
-          $subheading = $this->output->heading("".count($pageBadges)." matching badges out of $totalBadgeCount", 2, 'activatebadge');
+          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount, 2, 'activatebadge');
         }
           $downloadbutton = $downloadall;
 
@@ -801,6 +801,44 @@ class badgemaker_renderer extends core_badges_renderer {
 //    }
 
 
+
+public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
+    if ($url === null) {
+        $url = $this->page->url;
+    }
+
+    $menu = new action_menu;
+    $menu->attributes['class'] .= ' view-mode-selector vms';
+
+    $selected = null;
+    foreach ($modes as $mode => $modestr) {
+        $attributes = array(
+            'class' => 'vms-mode',
+            'data-mode' => $mode
+        );
+        if ($currentmode === $mode) {
+            $attributes['class'] .= ' currentmode';
+            $selected = $modestr;
+        }
+        if ($selected === null) {
+            $selected = $modestr;
+        }
+        $modeurl = new moodle_url($url, array($param => $mode));
+        if ($mode === 'default') {
+            $modeurl->remove_params($param);
+        }
+        $menu->add(new action_menu_link_secondary($modeurl, null, $modestr, $attributes));
+    }
+
+    $menu->set_menu_trigger($selected);
+
+    $html = html_writer::start_div('view-mode-selector vms');
+    $html .= get_string('viewing').' '.$this->render($menu);
+    $html .= html_writer::end_div();
+
+    return $html;
+}
+
     /**
      * Taken from management_heading() in management_renderer.php
      *
@@ -839,10 +877,11 @@ class badgemaker_renderer extends core_badges_renderer {
                 'course' => get_string('course_badges', 'local_badgemaker'),
                 'site' => get_string('site_badges', 'local_badgemaker')
             );
-            $managementRenderer = $PAGE->get_renderer('core_course', 'management'); // MH
+            // MB: I don't think it's wise to rely on another plugin if we can avoid it, even if it's one of the default ones.
+            // $managementRenderer = $PAGE->get_renderer('core_course', 'management'); // MH
 // $html .= '<div style="clear: left;"></div>';
             $html .= "<div style=\"float: right;\">";
-            $html .= $managementRenderer->view_mode_selector($viewmodes, $viewmode) . '</p>'; // MH
+            $html .= $this->badgemaker_view_mode_selector($viewmodes, $viewmode);//   $managementRenderer->view_mode_selector($viewmodes, $viewmode) . '</p>'; // MH
             $html .= "</div>";
 
             /*

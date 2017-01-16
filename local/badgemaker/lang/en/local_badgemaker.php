@@ -27,3 +27,4 @@ $string['site_badges'] = 'Site badges';
 $string['total_badges'] = "total badges";
 $string['matching_badges_out_of'] = "matching badges out of";
 $string['badges_earned_heading'] = "badges earned";
+$string['matching_badges_out_of'] = "matching badges out of";
