@@ -833,7 +833,9 @@ public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle
     $menu->set_menu_trigger($selected);
 
     $html = html_writer::start_div('view-mode-selector vms');
-    $html .= get_string('viewing').' '.$this->render($menu);
+    //$html .= get_string('viewing').' '.$this->render($menu);
+    $html .= html_writer::start_span('bold').get_string('viewing').html_writer::end_span().' '.$this->render($menu);
+
     $html .= html_writer::end_div();
 
     return $html;
