@@ -124,7 +124,7 @@ class badgemaker_renderer extends core_badges_renderer {
             $subheading = $this->output->heading($bes, 2, 'activatebadge');
         } else {
 
-          $subheading = $this->output->heading("".count($pageBadges)." matching badges out of $totalBadgeCount", 4, 'activatebadge');
+          $subheading = $this->output->heading("".count($pageBadges)." matching badges out of $totalBadgeCount", 2, 'activatebadge');
         }
           $downloadbutton = $downloadall;
 
