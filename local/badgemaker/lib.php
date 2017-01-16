@@ -642,7 +642,7 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
     // MH
     $usersql .= " LEFT JOIN {course} c on c.id = b.courseid";
     $userfields[] = 'c.fullname';
-    if($sort = 'course'){
+    if($sort == 'course'){
         $sort = 'c.fullname';
     }
 
