@@ -46,7 +46,7 @@ $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of def
 
 
 /* constrain params to only valid values */
-if (!in_array($sortby, array('name', 'status', 'course', 'recipients'))) {
+if (!in_array($sortby, array('name', 'status', 'course'))) { // cant sort by recipients cause different query.
     $sortby = 'name';
 }
 
