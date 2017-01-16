@@ -37,6 +37,10 @@ $show        = optional_param('show', 0, PARAM_INT);
 
 $badgesPerPage = 10;
 
+if ($clearsearch) {
+    $search = '';
+}
+
 // drop down taken from course/management.php
 $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of default, course or site.
 
@@ -78,9 +82,6 @@ if($search !== ''){
 }
 if($viewmode !== 'default'){
     $url->param('view', $viewmode);
-}
-if ($clearsearch) {
-    $search = '';
 }
 if ($course = $DB->get_record('course', array('id' => $courseid))) {
     //$url->param('type', $type);
