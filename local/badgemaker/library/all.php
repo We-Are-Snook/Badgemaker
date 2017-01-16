@@ -232,12 +232,14 @@ if ($msg !== '') {
 
 // die("There are $totalcount badges.  There should be $badgesPerPage per page, and we should now get page $page");
 
-echo $output->render($badges); // also outputs add new badge button.
-
-
 if (!$totalcount) {
     echo $output->notification(get_string('nobadges', 'badges'));
   }
+
+echo $output->render($badges); // also outputs add new badge button.
+
+
+
 
 // decided not to put this button on here because don't know course so would only be site badge
 // also removed from renderer which is what adds it to table

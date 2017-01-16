@@ -333,6 +333,15 @@ class badgemaker_renderer extends core_badges_renderer {
 //            $n['id'] = $this->page->url->get_param('id');
 //            $htmlnew = $this->output->single_button(new moodle_url('/badges/newbadge.php', $n), get_string('add_new_site_badge', 'local_badgemaker')); // MH /badges/ put in URL
 //        }
+
+    // Badgemaker Logo
+    $bmLogoSource = local_badgemaker_logo_source();
+
+    $bmLogo = html_writer::start_div('Badgemaker Logo', array('align' => 'right'));
+    $bmLink = html_writer::start_tag('a', array('href' => 'https://www.wearesnook.com/badgemaker'));
+    $bmImg = html_writer::empty_tag('img', array('src' => $bmLogoSource, 'width' => '60px'));
+    $bmLogo .= $bmLink . $bmImg . 'Powered by Badgemaker' . html_writer::end_tag('a') . html_writer::end_div();
+
       if ($badges->totalcount > 0) {
 
         $htmlpagingbar = $this->render($paging);
@@ -435,10 +444,10 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->data[] = $row;
         }
         $htmltable = html_writer::table($table);
-        return $htmlnew . /*$searchform .*/ $htmlpagingbar . $htmltable . $htmlpagingbar;
+        return $htmlnew . /*$searchform .*/ $htmlpagingbar . $htmltable . $htmlpagingbar . $bmLogo;
 
       }
-        return $htmlnew;
+        return $htmlnew . $bmLogo;
     }
 
     public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40) {
