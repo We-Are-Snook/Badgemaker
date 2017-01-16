@@ -39,16 +39,16 @@ class badgemaker_renderer extends core_badges_renderer {
               $name .= '(' . get_string('expired', 'badges') . ')';
           }
 
-          $courseAndDate = '<br>';
           // var_dump($badge);die();
-          if ($badge->courseid > 0) {
-            $coursename = $badge->courseFullname;
-            $courseAndDate .= html_writer::tag('span', $coursename, array('class' => 'course-name')).'<br>';
-          }
 
           $awarddate = $badge->dateissued;
           $awarddate = userdate($awarddate, '%d %B %Y');
+          $courseAndDate = '<br>';
           $courseAndDate .= html_writer::tag('span', $awarddate, array('class' => 'award-date'));
+          if ($badge->courseid > 0) {
+            $coursename = $badge->courseFullname;
+            $courseAndDate .= '<br>'.html_writer::tag('span', $coursename, array('class' => 'course-name')).'<br>';
+          }
 
           $download = $status = $push = '';
           if (($userid == $USER->id) && !$profile) {
@@ -96,6 +96,8 @@ class badgemaker_renderer extends core_badges_renderer {
       $backpack = $badges->backpack;
       $mybackpack = new moodle_url('/badges/mybackpack.php');
 
+      $bmLogo = badgemaker_badgemaker_logo_with_link();
+
       $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
       // die("There are $badges->totalcount that should be shown $badges->perpage per page and we want page $badges->page now");
       $htmlpagingbar = $this->render($paging);
@@ -106,7 +108,7 @@ class badgemaker_renderer extends core_badges_renderer {
           $backpackconnect = $this->output->box(get_string('localconnectto', 'badges', $mybackpack->out()), 'noticebox');
       }
       // Search box.
-      $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxaligncenter');
+      $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxalignleft');
 
       // Download all button.
       $downloadall = $this->output->single_button(
@@ -114,9 +116,11 @@ class badgemaker_renderer extends core_badges_renderer {
                   get_string('downloadall'), 'POST', array('class' => 'activatebadge'));
 
       // Local badges.
-      $localhtml = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
+      $localhtml = '';
       // $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
       // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
+      $tableDivStart = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
+
 
       $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
       $allBadgesCount = count($badges->badges);
@@ -124,18 +128,19 @@ class badgemaker_renderer extends core_badges_renderer {
       if ($allBadgesCount > 0 || $totalBadgeCount > 0) {
           if ($totalBadgeCount < 0) {
             $bes = "$allBadgesCount " . get_string('badges_earned_heading', 'local_badgemaker');
-            $subheading = $this->output->heading($bes, 2, 'activatebadge');
+            $subheading = $this->output->heading($bes . $downloadall, 2, 'activatebadge');
         } else {
 
-          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount, 2, 'activatebadge');
+          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount . $downloadall, 2, 'activatebadge');
         }
-          $downloadbutton = $downloadall;
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $subheading . $downloadbutton . $backpackconnect . html_writer::tag('br', '') . $searchform . $htmlpagingbar . $htmllist . $htmlpagingbar;
+          $breakTag = html_writer::tag('br', '');
+          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $breakTag . $searchform . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
+      $localhtml .= $bmLogo;
       $localhtml .= html_writer::end_tag('div');
 
       // External badges.
@@ -335,12 +340,7 @@ class badgemaker_renderer extends core_badges_renderer {
 //        }
 
     // Badgemaker Logo
-    $bmLogoSource = local_badgemaker_logo_source();
-
-    $bmLogo = html_writer::start_div('Badgemaker Logo', array('align' => 'right'));
-    $bmLink = html_writer::start_tag('a', array('href' => 'https://www.wearesnook.com/badgemaker'));
-    $bmImg = html_writer::empty_tag('img', array('src' => $bmLogoSource, 'width' => '60px'));
-    $bmLogo .= $bmLink . $bmImg . 'Powered by Badgemaker' . html_writer::end_tag('a') . html_writer::end_div();
+    $bmLogo = badgemaker_badgemaker_logo_with_link();
 
       if ($badges->totalcount > 0) {
 

@@ -138,6 +138,16 @@ global $CFG;
    return false;
  }
 
+ function badgemaker_badgemaker_logo_with_link() {
+   $bmLogoSource = local_badgemaker_logo_source();
+
+   $bmLogo = html_writer::start_div('Badgemaker Logo', array('align' => 'right'));
+   $bmLink = html_writer::start_tag('a', array('href' => 'https://www.wearesnook.com/badgemaker'));
+   $bmImg = html_writer::empty_tag('img', array('src' => $bmLogoSource, 'width' => '40px'));
+   $bmLogo .= $bmLink . $bmImg . 'Powered by BadgeMaker' . html_writer::end_tag('a') . html_writer::end_div();
+   return $bmLogo;
+ }
+
  /**
   * Returns true if the user has an ACTIVE badge in which the given file fullpath is a
   * requirement.
