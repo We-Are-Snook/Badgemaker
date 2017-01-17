@@ -195,6 +195,8 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
 if ($sortby == 'recipients') {
   $recipientSort = true;
   $sortby = '';
+} else {
+  $recipientSort = false;
 }
 
 $records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0, $search);
