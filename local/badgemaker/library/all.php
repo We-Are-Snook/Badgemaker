@@ -46,7 +46,7 @@ $viewmode = optional_param('view', 'default', PARAM_ALPHA); // Can be one of def
 
 
 /* constrain params to only valid values */
-if (!in_array($sortby, array('name', 'status', 'course'))) { // cant sort by recipients cause different query.
+if (!in_array($sortby, array('name', 'status', 'course', 'recipients'))) { // cant sort by recipients cause different query.
     $sortby = 'name';
 }
 
@@ -191,8 +191,14 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);
 }
 
-//$totalcount = count(badges_get_badges($type, $courseid, '', '' , '', ''));
+// if recipient search then we will sort in code later, so blank it for SQL
+if ($sortby == 'recipients') {
+  $recipientSort = true;
+  $sortby = '';
+}
+
 $records = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0, $search);
+
 $totalcount = count($records);
 
 $badges             = new badge_management($records);
@@ -202,6 +208,25 @@ $badges->page       = $page;
 $badges->perpage    = $badgesPerPage;
 $badges->totalcount = $totalcount;
 $badges->search     = $search;
+
+// if we are sorting by recipients then we sort manually here in code...
+if ($recipientSort) {
+  function badgeRecipientSortAsc($b1, $b2) {
+    if ($b1->awards > $b2->awards) {
+      return 1;
+    }
+    return -1;
+  }
+  function badgeRecipientSortDesc($b1, $b2) {
+    if ($b1->awards > $b2->awards) {
+      return -1;
+    }
+    return 1;
+  }
+  $tosort = $badges->badges;
+  uasort($tosort, $sorthow == 'ASC' ? 'badgeRecipientSortAsc' : 'badgeRecipientSortDesc');
+  $badges->badges = $tosort;
+}
 
 if (!empty($search)) {
     $realtotal = local_badgemaker_get_badges($type, 0, $sortby, $sorthow, 0, 0, 0);

@@ -98,7 +98,6 @@ class badgemaker_renderer extends core_badges_renderer {
 
       $breakTag = html_writer::tag('br', '');
 
-
       $bmLogo = badgemaker_badgemaker_logo_with_link();
 
       $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
@@ -357,8 +356,8 @@ class badgemaker_renderer extends core_badges_renderer {
               'status', $badges->sort, $badges->dir);
         $sortbycourse = $this->helper_sortable_heading(get_string('course', 'moodle'),
               'course', $badges->sort, $badges->dir); // MH
-        //$sortbyrecipients = $this->helper_sortable_heading(get_string('awards', 'badges'), // needs query changed
-          //    'recipients', $badges->sort, $badges->dir); // MH recipients
+        $sortbyrecipients = $this->helper_sortable_heading(get_string('awards', 'badges'), // needs query changed
+             'recipients', $badges->sort, $badges->dir); // MH recipients
         $table->head = array(
             $sortbyname,
             // MH $sortbystatus,
@@ -382,7 +381,7 @@ class badgemaker_renderer extends core_badges_renderer {
         $table->head[] = $sortbycourse;
 
         $table->colclasses[] = 'badgemaker-awards'; // recipients
-        $table->head[] =  get_string('awards', 'badges'); //$sortbyrecipients;
+        $table->head[] =  $sortbyrecipients;//get_string('awards', 'badges'); //$sortbyrecipients;
 
         if($this->has_any_action_capability()){
           $actionhead = get_string('actions');
