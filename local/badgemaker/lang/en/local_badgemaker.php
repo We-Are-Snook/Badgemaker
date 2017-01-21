@@ -28,3 +28,8 @@ $string['total_badges'] = "total badges";
 $string['matching_badges_out_of'] = "matching badges out of";
 $string['badges_earned_heading'] = "badges earned";
 $string['matching_badges_out_of'] = "matching badges out of";
+
+// my.php sort drop down
+$string['name'] = 'name';
+$string['course'] = 'course';
+$string['date'] = 'date';

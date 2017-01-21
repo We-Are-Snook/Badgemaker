@@ -91,6 +91,7 @@ class badgemaker_renderer extends core_badges_renderer {
       return html_writer::alist($items, array('class' => 'badges'));
   }
 
+  // used on my.php badge library page
   public function badgemaker_render_badge_user_collection(badge_user_collection $badges, $totalBadgeCount = -1) {
       global $CFG, $USER, $SITE;
       $backpack = $badges->backpack;
@@ -117,6 +118,44 @@ class badgemaker_renderer extends core_badges_renderer {
                   new moodle_url('/badges/mybadges.php', array('downloadall' => true, 'sesskey' => sesskey())),
                   get_string('downloadall'), 'POST', array('class' => 'activatebadge'));
 
+
+      // sort
+      // from management.php course and cateogyr management page, right had menu that has sort courses in middle.
+      // public function course_listing_actions(coursecat $category, course_in_list $course = null, $perpage = 20) {
+      $params = $this->page->url->params();
+      //$params['action'] = 'resortcourses';
+      //$params['sesskey'] = sesskey();
+      unset($params['dir']); // clear dir so we can have ASC by default.
+      $baseurl = new moodle_url('my.php', $params);
+      $nameurl = new moodle_url($baseurl, array('sortby' => 'name'));
+      $nameurldesc = new moodle_url($baseurl, array('sortby' => 'name', 'dir' => 'DESC'));
+      $courseurl = new moodle_url($baseurl, array('sortby' => 'course'));
+      $courseurldesc = new moodle_url($baseurl, array('sortby' => 'course', 'dir' => 'DESC'));
+      $dateurl = new moodle_url($baseurl, array('sortby' => 'date'));
+      $datedescurl = new moodle_url($baseurl, array('sortby' => 'date', 'dir' => 'DESC'));
+      $menu = new action_menu(array(
+          new action_menu_link_secondary($nameurl,
+              null,
+              get_string('sortbyx', 'moodle', get_string('name', 'local_badgemaker'))),
+          new action_menu_link_secondary($nameurldesc,
+              null,
+              get_string('sortbyxreverse', 'moodle', get_string('name', 'local_badgemaker'))),
+          new action_menu_link_secondary($courseurl,
+              null,
+              get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))), // uses fullname
+          new action_menu_link_secondary($courseurldesc,
+              null,
+              get_string('sortbyxreverse', 'moodle', get_string('course', 'local_badgemaker'))),
+          new action_menu_link_secondary($dateurl,
+              null,
+              get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
+          new action_menu_link_secondary($datedescurl,
+              null,
+              get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
+      ));
+      $menu->set_menu_trigger(get_string('resortcourses'));
+      $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
+
       // Local badges.
       $localhtml = '';
       // $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
@@ -137,7 +176,7 @@ class badgemaker_renderer extends core_badges_renderer {
         }
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
+          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $sortdropdown . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
@@ -920,4 +959,6 @@ public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle
 
         return $html;
     }
+
+
 }

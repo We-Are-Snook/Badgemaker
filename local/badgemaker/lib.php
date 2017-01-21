@@ -668,6 +668,7 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
     $params['type'] = $type;
 
     $sql = "SELECT $fields FROM {badge} b $usersql WHERE $where $sorting";
+
     $records = $DB->get_records_sql($sql, $params, $page * $perpage, $perpage);
 
     $badges = array();

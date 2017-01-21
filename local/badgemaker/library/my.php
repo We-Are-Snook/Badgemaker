@@ -39,7 +39,7 @@ if ($clearsearch) {
     $search = '';
 }
 
-if (!in_array($sortby, array('name', 'status'))) {
+if (!in_array($sortby, array('name', 'course', 'date'))) {
     $sortby = 'name';
 }
 
