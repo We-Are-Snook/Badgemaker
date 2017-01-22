@@ -154,7 +154,8 @@ class badgemaker_renderer extends core_badges_renderer {
               get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
       ));
       $menu->set_menu_trigger(get_string('resortcourses'));
-      $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
+      // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
+      $sortdropdown = html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions', 'style' => 'float: right'));
 
       // Local badges.
       $localhtml = '';
