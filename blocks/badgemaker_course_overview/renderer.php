@@ -119,7 +119,9 @@ class block_badgemaker_course_overview_renderer extends block_course_overview_re
               $earnedCount = count($earned);
               $earnableCount = count($earnable);
               $totalBadgeCount = $earnedCount + $earnableCount;
-              $html .= $this->output->heading("Badges: $earnedCount/$totalBadgeCount", 3);
+              $yhe = get_string('you_have_earned', 'block_badgemaker_course_overview');
+              $badgesString = get_string('badges', 'block_badgemaker_course_overview');
+              $html .= $this->output->heading("$yhe $earnedCount/$totalBadgeCount $badgesString", 3);
               $html .= $brender->print_combined_overview_list($earned, $earnable);
             }
             // if (count($earned) > 0) {
