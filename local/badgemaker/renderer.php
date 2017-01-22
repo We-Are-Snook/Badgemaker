@@ -495,7 +495,7 @@ class badgemaker_renderer extends core_badges_renderer {
         return $htmlnew . $bmLogo;
     }
 
-    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40) {
+    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40, $alignment = 'left', $userid = null, $profile = null) {
       global $USER, $CFG;
       $badges = array();
       if (count($earnedBadges) > 0) {
@@ -535,8 +535,12 @@ class badgemaker_renderer extends core_badges_renderer {
               $name .= '(' . get_string('expired', 'badges') . ')';
           }
 
+          $dateissued = '';
+
           $download = $status = $push = '';
           if ($earnedThisOne) {
+            $di = $badge->dateissued;
+            $dateissued = html_writer::tag('span', userdate($di, '%d %B %y'), array('class' => $textClass));
             if (empty($userid)) {
               $userid = null;
             }
@@ -578,14 +582,14 @@ class badgemaker_renderer extends core_badges_renderer {
           }
 
           $actions = html_writer::tag('div', $push . $download . $status, array('class' => 'badge-actions'));
-          $items[] = html_writer::link($url, $image . $actions . $name, array('title' => $bname));
+          $items[] = html_writer::link($url, $image . $actions . $name . $dateissued, array('title' => $bname));
       }
 
       if ($items == null) {
         $items = array();
       }
 
-      return html_writer::alist($items, array('class' => 'badges'));
+      return html_writer::alist($items, array('class' => 'badges', 'align' => $alignment));
     }
 
     public function print_small_awarded_list($badges, $badgesize = 40) {

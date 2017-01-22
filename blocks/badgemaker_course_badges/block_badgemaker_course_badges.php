@@ -83,7 +83,7 @@ class block_badgemaker_course_badges extends block_base {
 
         // require_once($CFG->dirroot . "/badgemaker/badgemaker_renderer.php");
         // $output = $this->page->get_renderer('core', 'badges');
-        $output = new badgemaker_renderer($this->page);
+        $output = new badgemaker_renderer($this->page, 'badges');
 
         // $this->content->text .= $output->heading("Badges: $earnedCount/$totalBadgeCount", 6);
 
@@ -91,7 +91,7 @@ class block_badgemaker_course_badges extends block_base {
         $this->content->text .= "Badges: $earnedCount/$totalBadgeCount";
         $this->content->text .= html_writer::end_span();
 
-        $this->content->text .= $output->print_combined_overview_list($earned, $earnable);
+        $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 40, 'center');
 
         return $this->content;
 	}
