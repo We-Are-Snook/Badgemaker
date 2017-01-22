@@ -61,18 +61,13 @@ class block_badgemaker_library_button extends block_base {
         $this->content = new stdClass();
         $this->content->text = '';
 
+        $this->content->text .= html_writer::start_div('library button', array('align' => 'center'));
+
+
         // before button
         if (!empty($CFG->block_badgemaker_library_button_before)) {
           if (strlen($CFG->block_badgemaker_library_button_before) > 0) {
             $this->content->text .= $CFG->block_badgemaker_library_button_before.'<br>';
-          }
-        }
-
-        if (!empty($CFG->block_badgemaker_library_button_showlogo)) {
-          if ($CFG->block_badgemaker_library_button_showlogo) {
-            $ls = local_badgemaker_logo_source();
-            $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%', 'align' => 'left'));
-            $this->content->text .= $img;
           }
         }
 
@@ -81,7 +76,20 @@ class block_badgemaker_library_button extends block_base {
         $buttonTitle = get_string('button_text', 'block_badgemaker_library_button');
         $this->content->text .= $OUTPUT->single_button($buttonUrl, $buttonTitle);
 
-        // $this->content->text .= html_writer::end_tag("whatever");
+        // logo
+        if (!empty($CFG->block_badgemaker_library_button_showlogo)) {
+          if ($CFG->block_badgemaker_library_button_showlogo) {
+            $liblink = local_badgemaker_libraryPageURL();
+            $logolink = html_writer::start_tag('a', array('href' => $liblink));
+            $ls = local_badgemaker_logo_source();
+            $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
+            $logolink .= $img;
+            $logolink .= html_writer::end_tag('a');
+            $this->content->text .= $logolink;
+          }
+        }
+
+        $this->content->text .= html_writer::end_div('library button');
 
         // after button
         if (!empty($CFG->block_badgemaker_library_button_after)) {
