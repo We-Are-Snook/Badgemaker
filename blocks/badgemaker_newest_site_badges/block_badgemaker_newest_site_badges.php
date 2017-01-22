@@ -75,9 +75,8 @@ class block_badgemaker_newest_site_badges extends block_base {
         $badges = badges_get_badges(BADGE_TYPE_SITE, 0, 'timecreated', 'DESC', 0, $this->config->numberofbadges);
 
         if (count($badges) > 0){
-            // $output = $this->page->get_renderer('core', 'badges');
-            $output = new badgemaker_renderer($this->page);
-            $this->content->text = $output->print_meta_badges_list($badges, $USER->id, true);
+            $output = new badgemaker_renderer($this->page, 'badges');
+            $this->content->text .= $output->print_meta_badges_list($badges, 'center');
         } else {
           return null;
           // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_newest_site_badges');
