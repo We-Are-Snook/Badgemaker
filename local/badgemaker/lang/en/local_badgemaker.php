@@ -34,6 +34,7 @@ $string['name'] = 'name';
 $string['course'] = 'course';
 $string['date'] = 'date';
 
+$string['sort_badges'] = "Sort Badges";
 $string['sort_name_ascending'] = 'Name ascending';
 $string['sort_name_descending'] = 'Name descending';
 $string['sort_course_ascending'] = 'Course ascending';
