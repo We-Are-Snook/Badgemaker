@@ -719,10 +719,10 @@ class badgemaker_renderer extends core_badges_renderer {
       return html_writer::alist($items, array('class' => 'badges', 'align' => $alignment));
     }
 
-    public function recent_course_badges_list($badges) {
+    public function recent_course_badges_list($badges, $userid = 0, $profile = null, $alignment = 'left') {
       global $USER, $CFG;
       foreach ($badges as $badge) {
-          if (!$external) {
+          if (empty($external) || !$external) {
               $context = ($badge->type == BADGE_TYPE_SITE) ? context_system::instance() : context_course::instance($badge->courseid);
               $bname = $badge->name;
               $imageurl = moodle_url::make_pluginfile_url($context->id, 'badges', 'badgeimage', $badge->id, '/', 'f1', false);
@@ -778,7 +778,7 @@ class badgemaker_renderer extends core_badges_renderer {
           $items[] = html_writer::link($url, $image . $actions . $name, array('title' => $bname));
       }
 
-      return html_writer::alist($items, array('class' => 'badges'));
+      return html_writer::alist($items, array('class' => 'badges', 'align' => $alignment));
     }
 
     public function awarded_course_badges_list($badges) {

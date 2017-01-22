@@ -81,9 +81,9 @@ class block_badgemaker_recent_course_awards extends block_base {
 
         if (count($badges) > 0) {
           // we use our own custom renderer here...
-          $output = new badgemaker_renderer($this->page);
+          $output = new badgemaker_renderer($this->page, 'badges');
             // $output = $this->page->get_renderer('core', 'badges');
-            $this->content->text = $output->recent_course_badges_list($badges);
+            $this->content->text = $output->recent_course_badges_list($badges, 0, null, 'center');
         } else {
           return null;
             // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_recent_course_awards');
