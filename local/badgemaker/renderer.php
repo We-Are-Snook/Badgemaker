@@ -161,7 +161,7 @@ class badgemaker_renderer extends core_badges_renderer {
       ));
       $menu->set_menu_trigger(get_string('resortcourses'));
       // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
-      $sortdropdown = html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions', 'style' => 'float: right'));
+      $sortdropdown = html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions', 'style' => 'float: left'));
 
       // Local badges.
       $localhtml = '';
@@ -183,7 +183,7 @@ class badgemaker_renderer extends core_badges_renderer {
         }
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $sortdropdown . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
+          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $sortdropdown . $breakTag . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
