@@ -127,31 +127,37 @@ class badgemaker_renderer extends core_badges_renderer {
       //$params['sesskey'] = sesskey();
       unset($params['dir']); // clear dir so we can have ASC by default.
       $baseurl = new moodle_url('my.php', $params);
-      $nameurl = new moodle_url($baseurl, array('sortby' => 'name'));
-      $nameurldesc = new moodle_url($baseurl, array('sortby' => 'name', 'dir' => 'DESC'));
-      $courseurl = new moodle_url($baseurl, array('sortby' => 'course'));
-      $courseurldesc = new moodle_url($baseurl, array('sortby' => 'course', 'dir' => 'DESC'));
-      $dateurl = new moodle_url($baseurl, array('sortby' => 'date'));
-      $datedescurl = new moodle_url($baseurl, array('sortby' => 'date', 'dir' => 'DESC'));
+      $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
+      $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
+      $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
+      $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
+      $dateurl = new moodle_url($baseurl, array('sort' => 'date'));
+      $datedescurl = new moodle_url($baseurl, array('sort' => 'date', 'dir' => 'DESC'));
       $menu = new action_menu(array(
           new action_menu_link_secondary($nameurl,
               null,
-              get_string('sortbyx', 'moodle', get_string('name', 'local_badgemaker'))),
+              // get_string('sortbyx', 'moodle', get_string('name', 'local_badgemaker'))),
+              get_string('sort_name_ascending', 'local_badgemaker')),
           new action_menu_link_secondary($nameurldesc,
               null,
-              get_string('sortbyxreverse', 'moodle', get_string('name', 'local_badgemaker'))),
+              // get_string('sortbyxreverse', 'moodle', get_string('name', 'local_badgemaker'))),
+              get_string('sort_name_descending', 'local_badgemaker')),
           new action_menu_link_secondary($courseurl,
               null,
-              get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))), // uses fullname
+              // get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))), // uses fullname
+              get_string('sort_course_ascending', 'local_badgemaker')),
           new action_menu_link_secondary($courseurldesc,
               null,
-              get_string('sortbyxreverse', 'moodle', get_string('course', 'local_badgemaker'))),
+              // get_string('sortbyxreverse', 'moodle', get_string('course', 'local_badgemaker'))),
+              get_string('sort_course_descending', 'local_badgemaker')),
           new action_menu_link_secondary($dateurl,
               null,
-              get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
+              // get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
+              get_string('sort_date_ascending', 'local_badgemaker')),
           new action_menu_link_secondary($datedescurl,
               null,
-              get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
+              // get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
+              get_string('sort_date_descending', 'local_badgemaker'))
       ));
       $menu->set_menu_trigger(get_string('resortcourses'));
       // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');

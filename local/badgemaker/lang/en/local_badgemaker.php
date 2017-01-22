@@ -33,3 +33,10 @@ $string['matching_badges_out_of'] = "matching badges out of";
 $string['name'] = 'name';
 $string['course'] = 'course';
 $string['date'] = 'date';
+
+$string['sort_name_ascending'] = 'Name ascending';
+$string['sort_name_descending'] = 'Name descending';
+$string['sort_course_ascending'] = 'Course ascending';
+$string['sort_course_descending'] = 'Course descending';
+$string['sort_date_ascending'] = 'Earliest first';
+$string['sort_date_descending'] = 'Latest first';

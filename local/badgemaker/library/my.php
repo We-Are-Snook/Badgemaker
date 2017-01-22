@@ -134,6 +134,10 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);
 }
 
+if ($sortby == 'date') {
+  $sortby = 'dateissued';
+}
+// echo "Sorting by $sortby in dir $sorthow";
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
 
 if (empty($search)) {
