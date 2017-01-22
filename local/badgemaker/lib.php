@@ -273,6 +273,10 @@ global $CFG;
    return new moodle_url('/local/badgemaker/library/my.php');
  }
 
+ function local_badgemaker_libraryAllPageURL() {
+   return new moodle_url('/local/badgemaker/library/all.php');
+ }
+
  function local_badgemaker_aboutPageURL() {
    return $url = new moodle_url('/badgemakerabout.php');
  }
