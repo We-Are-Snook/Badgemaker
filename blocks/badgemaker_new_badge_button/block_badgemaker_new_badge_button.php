@@ -65,6 +65,8 @@ class block_badgemaker_new_badge_button extends block_base {
         $this->content = new stdClass();
         $this->content->text = '';
 
+        $this->content->text .= html_writer::start_div('about-button', array('align' => 'center'));
+
         // before button
         $bbc = get_string('maincontent_before_button', 'block_badgemaker_new_badge_button');
         if (strlen($bbc)) {
@@ -104,6 +106,9 @@ class block_badgemaker_new_badge_button extends block_base {
         if (strlen($foot)) {
           $this->content->footer = $foot;
         }
+
+        $this->content->text .= html_writer::end_div('about-button');
+
 
         return $this->content;
     }

@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -92,7 +92,7 @@ class block_badgemaker_awarded_in_managed_courses extends block_base {
             return $this->content;
         }
 
-		$output = new badgemaker_renderer($this->page);
+		$output = new badgemaker_renderer($this->page, 'badges');
 
     $courses = $this->get_user_managed_course_ids($USER->id);
 

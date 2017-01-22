@@ -688,7 +688,7 @@ class badgemaker_renderer extends core_badges_renderer {
       return html_writer::alist($items, array('class' => 'badges'));
     }
 
-    public function print_meta_badges_list($badges, $alignment = 'left') {
+    public function print_meta_badges_list($badges, $alignment = 'center') {
       global $USER, $CFG;
       foreach ($badges as $badge) {
           if (empty($external) || !$external) {

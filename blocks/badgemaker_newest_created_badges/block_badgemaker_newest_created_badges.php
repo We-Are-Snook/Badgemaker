@@ -78,7 +78,7 @@ class block_badgemaker_newest_created_badges extends block_base {
 
         if (count($badges) > 0){
           // we use our own custom renderer here...
-          $output = new badgemaker_renderer($this->page);
+          $output = new badgemaker_renderer($this->page, 'badges');
           $this->content->text = $output->print_meta_badges_list($badges);
         } else {
           return null;
