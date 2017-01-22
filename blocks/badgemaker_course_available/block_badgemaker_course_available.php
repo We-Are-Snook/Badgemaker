@@ -73,7 +73,7 @@ class block_badgemaker_course_available extends block_base {
         $badges = badges_get_badges(BADGE_TYPE_COURSE, $course->id, 'timecreated', 'DESC', 0);
 
         if (count($badges) > 0){
-          $output = new badgemaker_renderer($this->page);
+          $output = new badgemaker_renderer($this->page, 'badges');
           $this->content->text = $output->print_meta_badges_list($badges);
         } else {
           return null;
