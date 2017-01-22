@@ -39,8 +39,6 @@ class badgemaker_renderer extends core_badges_renderer {
               $name .= '(' . get_string('expired', 'badges') . ')';
           }
 
-          // var_dump($badge);die();
-
           $awarddate = $badge->dateissued;
           $awarddate = userdate($awarddate, '%d %B %Y');
           $courseAndDate = '<br>';

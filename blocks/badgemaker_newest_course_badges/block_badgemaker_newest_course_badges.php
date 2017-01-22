@@ -10,6 +10,7 @@ global $CFG;
 
 require_once($CFG->libdir . "/badgeslib.php");
 require_once($CFG->dirroot . "/local/badgemaker/lib.php");
+require_once($CFG->dirroot . "/local/badgemaker/renderer.php");
 
 class block_badgemaker_newest_course_badges extends block_base {
     public function init() {
@@ -74,8 +75,8 @@ class block_badgemaker_newest_course_badges extends block_base {
         $badges = badges_get_badges(BADGE_TYPE_COURSE, 0, 'timecreated', 'DESC', 0, $this->config->numberofbadges);
 
         if (count($badges) > 0){
-            $output = $this->page->get_renderer('core', 'badges');
-            $this->content->text = $output->print_badges_list($badges, $USER->id, true);
+            $output = new badgemaker_renderer($this->page, 'badges');
+            $this->content->text .= $output->print_meta_badges_list($badges, 'center');
         } else {
           return null;
           // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_newest_course_badges');
