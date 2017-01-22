@@ -75,7 +75,7 @@ class block_badgemaker_course_awarded extends block_base {
         }
 
         // $output = $this->page->get_renderer('core', 'badges');
-        $output = new badgemaker_renderer($this->page);
+        $output = new badgemaker_renderer($this->page, 'badges');
         $this->content->text = $output->awarded_course_badges_list($badgesAwarded);
         // $this->content->text = $output->print_badges_list($badgesAwarded, $USER->id, true);
 
