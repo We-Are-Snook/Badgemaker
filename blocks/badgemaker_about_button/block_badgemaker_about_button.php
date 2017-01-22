@@ -2,7 +2,7 @@
 
 /**
 * @package    Badgemaker
-* @copyright  2016 We Are Snook <code@wearesnook.com>
+* @copyright  2017 We Are Snook <code@wearesnook.com>
 * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
 */
 
@@ -61,6 +61,9 @@ class block_badgemaker_about_button extends block_base {
         $this->content = new stdClass();
         $this->content->text = '';
 
+        $this->content->text .= html_writer::start_div('about-button', array('align' => 'center'));
+
+
         // before button
         $bbc = get_string('maincontent_before_button', 'block_badgemaker_about_button');
         if (strlen($bbc)) {
@@ -78,12 +81,14 @@ class block_badgemaker_about_button extends block_base {
           $this->content->text .= $abc;
         }
 
+        $this->content->text .= html_writer::end_div('about-button');
+
         // footer
         $foot = get_string('footer', 'block_badgemaker_about_button');
         if (strlen($foot)) {
           $this->content->footer = $foot;
         }
-        
+
         return $this->content;
     }
 }

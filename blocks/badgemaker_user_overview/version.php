@@ -8,6 +8,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017012200;
+$plugin->version   = 2017012201;
 $plugin->requires  = 2015111600;
 $plugin->component = 'block_badgemaker_user_overview';

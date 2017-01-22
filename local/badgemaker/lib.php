@@ -278,7 +278,7 @@ global $CFG;
  }
 
  function local_badgemaker_aboutPageURL() {
-   return $url = new moodle_url('/badgemakerabout.php');
+   return $url = new moodle_url('https://www.wearesnook.com/badgemaker');
  }
 
  function local_badgemaker_badgeIssuedId($userid, $badgeid) {
