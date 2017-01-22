@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -723,7 +723,7 @@ class badgemaker_renderer extends core_badges_renderer {
       return html_writer::alist($items, array('class' => 'badges', 'align' => $alignment));
     }
 
-    public function recent_course_badges_list($badges, $userid = 0, $profile = null, $alignment = 'left') {
+    public function recent_course_badges_list($badges, $userid = 0, $profile = null, $alignment = 'center') {
       global $USER, $CFG;
       foreach ($badges as $badge) {
           if (empty($external) || !$external) {
