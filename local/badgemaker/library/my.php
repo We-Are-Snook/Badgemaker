@@ -16,8 +16,8 @@ $path =  '/local/badgemaker/library/my.php';
 // $type       = 1;//required_param('type', PARAM_INT); // 1 = site, 2 = course.
 // $courseid   = 0;//optional_param('id', 0, PARAM_INT);
 $deactivate = optional_param('lock', 0, PARAM_INT);
-$sortby     = optional_param('sort', 'name', PARAM_ALPHA);
-$sorthow    = optional_param('dir', 'ASC', PARAM_ALPHA);
+$sortby     = optional_param('sort', '', PARAM_ALPHA);
+$sorthow    = optional_param('dir', '', PARAM_ALPHA);
 //$confirm    = optional_param('confirm', false, PARAM_BOOL);
 //$delete     = optional_param('delete', 0, PARAM_INT);
 //$archive    = optional_param('archive', 0, PARAM_INT);
@@ -39,12 +39,18 @@ if ($clearsearch) {
     $search = '';
 }
 
-if (!in_array($sortby, array('name', 'course', 'date'))) {
-    $sortby = 'name';
+// see $url->param section below if changing default sort.
+// current default sort is issued descending, or if course/name then ascending
+if (!in_array($sortby, array('name', 'course', 'dateissued'))) {
+    $sortby = 'dateissued';
 }
 
 if ($sorthow != 'ASC' and $sorthow != 'DESC') {
-    $sorthow = 'ASC';
+    if($sortby == 'dateissued') {
+        $sorthow = 'DESC';
+    }else{
+        $sorthow = 'ASC';
+    }
 }
 
 if ($page < 0) {
@@ -56,12 +62,21 @@ require_login();
 $err = '';
 $url = new moodle_url($path); // '/badges/index.php'
 
-if($sorthow !== 'ASC'){
-    $url->param('dir', $sorthow);
+// we put in any params that are not the defaults
+if($sortby == 'dateissued') {
+    // default is descneind so store if is opposite.
+    if ($sorthow !== 'DESC') {
+        $url->param('dir', $sorthow);
+    }
 }
-if($sortby !== 'name'){
+else {
+    // if the sort isnt by date issued then the default is ascending
     $url->param('sort', $sortby);
+    if ($sorthow !== 'ASC') {
+        $url->param('dir', $sorthow);
+    }
 }
+
 if($search !== ''){
     $url->param('search', $search);
 }
@@ -134,9 +149,6 @@ if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
     echo $OUTPUT->render($editcontrols);
 }
 
-if ($sortby == 'date') {
-  $sortby = 'dateissued';
-}
 // echo "Sorting by $sortby in dir $sorthow";
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
 

@@ -125,13 +125,21 @@ class badgemaker_renderer extends core_badges_renderer {
       //$params['sesskey'] = sesskey();
       unset($params['dir']); // clear dir so we can have ASC by default.
       $baseurl = new moodle_url('my.php', $params);
+      $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
+      $dateissueddescurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'ASC'));
       $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
       $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
       $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
       $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
-      $dateurl = new moodle_url($baseurl, array('sort' => 'date'));
-      $datedescurl = new moodle_url($baseurl, array('sort' => 'date', 'dir' => 'DESC'));
       $menu = new action_menu(array(
+          new action_menu_link_secondary($dateissuedurl,
+              null,
+              // get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
+              get_string('sort_dateissued_ascending', 'local_badgemaker')),
+          new action_menu_link_secondary($dateissueddescurl,
+              null,
+              // get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
+              get_string('sort_dateissued_descending', 'local_badgemaker')),
           new action_menu_link_secondary($nameurl,
               null,
               // get_string('sortbyx', 'moodle', get_string('name', 'local_badgemaker'))),
@@ -142,24 +150,16 @@ class badgemaker_renderer extends core_badges_renderer {
               get_string('sort_name_descending', 'local_badgemaker')),
           new action_menu_link_secondary($courseurl,
               null,
-              // get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))), // uses fullname
-              get_string('sort_course_ascending', 'local_badgemaker')),
+              // get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))),
+              get_string('sort_course_ascending', 'local_badgemaker')), // uses fullname
           new action_menu_link_secondary($courseurldesc,
               null,
               // get_string('sortbyxreverse', 'moodle', get_string('course', 'local_badgemaker'))),
-              get_string('sort_course_descending', 'local_badgemaker')),
-          new action_menu_link_secondary($dateurl,
-              null,
-              // get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
-              get_string('sort_date_ascending', 'local_badgemaker')),
-          new action_menu_link_secondary($datedescurl,
-              null,
-              // get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
-              get_string('sort_date_descending', 'local_badgemaker'))
+              get_string('sort_course_descending', 'local_badgemaker'))
       ));
       $menu->set_menu_trigger(get_string('sort_badges', 'local_badgemaker'));
       // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
-      $sortdropdown = html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions', 'style' => 'float: left'));
+      $sortdropdown = $this->render($menu);//html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions'));//, 'style' => 'float: left'));
 
       // Local badges.
       $localhtml = '';
@@ -181,7 +181,7 @@ class badgemaker_renderer extends core_badges_renderer {
         }
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart . $subheading . $breakTag . $backpackconnect . $searchform . $sortdropdown . $breakTag . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
+          $localhtml .= $tableDivStart . $subheading. $sortdropdown . $breakTag . $backpackconnect . $searchform  . $breakTag . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
@@ -859,45 +859,46 @@ class badgemaker_renderer extends core_badges_renderer {
 //    }
 
 
+// filter
+    public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
+        if ($url === null) {
+            $url = $this->page->url;
+        }
 
-public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
-    if ($url === null) {
-        $url = $this->page->url;
+        $menu = new action_menu;
+        $menu->attributes['class'] .= ' view-mode-selector vms';
+
+        $selected = null;
+        foreach ($modes as $mode => $modestr) {
+            $attributes = array(
+                'class' => 'vms-mode',
+                'data-mode' => $mode
+            );
+            if ($currentmode === $mode) {
+                $attributes['class'] .= ' currentmode';
+                $selected = $modestr;
+            }
+            if ($selected === null) {
+                $selected = $modestr;
+            }
+            $modeurl = new moodle_url($url, array($param => $mode));
+            if ($mode === 'default') {
+                $modeurl->remove_params($param);
+            }
+            $menu->add(new action_menu_link_secondary($modeurl, null, $modestr, $attributes));
+        }
+
+        $menu->set_menu_trigger($selected);
+
+        // filter
+        $html = html_writer::start_div('view-mode-selector vms');
+        //$html .= get_string('viewing').' '.$this->render($menu);
+        $html .= html_writer::start_span('bold').get_string('viewing').html_writer::end_span().' '.$this->render($menu);
+
+        $html .= html_writer::end_div();
+
+        return $html;
     }
-
-    $menu = new action_menu;
-    $menu->attributes['class'] .= ' view-mode-selector vms';
-
-    $selected = null;
-    foreach ($modes as $mode => $modestr) {
-        $attributes = array(
-            'class' => 'vms-mode',
-            'data-mode' => $mode
-        );
-        if ($currentmode === $mode) {
-            $attributes['class'] .= ' currentmode';
-            $selected = $modestr;
-        }
-        if ($selected === null) {
-            $selected = $modestr;
-        }
-        $modeurl = new moodle_url($url, array($param => $mode));
-        if ($mode === 'default') {
-            $modeurl->remove_params($param);
-        }
-        $menu->add(new action_menu_link_secondary($modeurl, null, $modestr, $attributes));
-    }
-
-    $menu->set_menu_trigger($selected);
-
-    $html = html_writer::start_div('view-mode-selector vms');
-    //$html .= get_string('viewing').' '.$this->render($menu);
-    $html .= html_writer::start_span('bold').get_string('viewing').html_writer::end_span().' '.$this->render($menu);
-
-    $html .= html_writer::end_div();
-
-    return $html;
-}
 
     /**
      * Taken from management_heading() in management_renderer.php

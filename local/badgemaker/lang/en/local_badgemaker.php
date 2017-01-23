@@ -35,9 +35,9 @@ $string['course'] = 'course';
 $string['date'] = 'date';
 
 $string['sort_badges'] = "Sort Badges";
-$string['sort_name_ascending'] = 'Name ascending';
-$string['sort_name_descending'] = 'Name descending';
-$string['sort_course_ascending'] = 'Course ascending';
-$string['sort_course_descending'] = 'Course descending';
-$string['sort_date_ascending'] = 'Earliest first';
-$string['sort_date_descending'] = 'Latest first';
+$string['sort_name_ascending'] = 'Name (A to Z)';
+$string['sort_name_descending'] = 'Name (Z to A)';
+$string['sort_course_ascending'] = 'Course (A to Z)';
+$string['sort_course_descending'] = 'Course (Z to A)';
+$string['sort_dateissued_ascending'] = 'Newly awarded'; // awarded sounds better for a badge than issued
+$string['sort_dateissued_descending'] = 'Oldest awarded';
