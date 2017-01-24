@@ -48,7 +48,7 @@ class block_badgemaker_user_overview extends block_base {
     }
 
     public function get_content() {
-        global $USER, $PAGE, $CFG;
+        global $USER, $PAGE, $CFG, $SITE;
 
         $badgesAwarded = badges_get_user_badges($USER->id);
         $badgesAwardedCount = count($badgesAwarded);
@@ -89,6 +89,9 @@ class block_badgemaker_user_overview extends block_base {
         $this->content->text .= html_writer::link($blurl, ''.$totalBadges);
         $this->content->text .= '</b>' . get_string('all_badges', 'block_badgemaker_user_overview');
         $this->content->text .= html_writer::end_span();
+        $this->content->text .= html_writer::start_div('org-name', array('style' => 'line-height: 0.9; color: grey'));
+        $this->content->text .= '<br>' . get_string('at', 'block_badgemaker_user_overview') . ' ' . $SITE->fullname;
+        $this->content->text .= html_writer::end_div('org-name');
         $this->content->text .= html_writer::end_div('overview-content');
 
         // $foot = get_string('footer', 'block_badgemaker_totals_sitewide');

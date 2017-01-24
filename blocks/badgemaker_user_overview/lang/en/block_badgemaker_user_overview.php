@@ -12,3 +12,4 @@ $string['title'] = 'Badges Overview';
 $string['footer'] = 'Badges assisted by Badgemaker';
 $string['you_have_earned'] = 'You have earned';
 $string['badges'] = 'badges';
+$string['at'] = 'at';
