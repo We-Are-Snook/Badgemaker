@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -35,15 +35,16 @@ class block_badgemaker_user_earned_total extends block_base {
       $badges = badges_get_user_badges($USER->id, 0, 0, 0, '', true);
 
       $this->content         =  new stdClass;
+      $this->content->text = '';
+      $this->content->text .= html_writer::start_span('lead');
       $cp = get_string('earned_prefix', 'block_badgemaker_user_earned_total');
       $cs = get_string('earned_suffix', 'block_badgemaker_user_earned_total');
-      $this->content->text = $cp;
-      $this->content->text .= html_writer::start_span('lead');
+      $this->content->text .= $cp;
       $this->content->text .= '<b>';
-      $this->content->text .= html_writer::link(new moodle_url('/local/badgemaker/badge_library.php'), ''.count($badges));
+      $this->content->text .= html_writer::link(local_badgemaker_libraryPageURL(), ''.count($badges));
       $this->content->text .= '</b>';
-      $this->content->text .= html_writer::end_span();
       $this->content->text .= ' '.$cs;
+      $this->content->text .= html_writer::end_span();
       return $this->content;
     }
   }
