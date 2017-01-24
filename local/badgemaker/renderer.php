@@ -174,14 +174,14 @@ class badgemaker_renderer extends core_badges_renderer {
       if ($allBadgesCount > 0 || $totalBadgeCount > 0) {
           if ($totalBadgeCount < 0) {
             $bes = "$allBadgesCount " . get_string('badges_earned_heading', 'local_badgemaker');
-            $subheading = $this->output->heading($bes . $downloadall, 2, 'activatebadge');
+            $subheading = $this->output->heading($bes , 2, 'activatebadge');
         } else {
 
           $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount . ' ' . $downloadall, 2, 'activatebadge');
         }
 
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart . $subheading. $sortdropdown . $breakTag . $backpackconnect . $searchform  . $breakTag . $htmlpagingbar . $htmllist . $breakTag . $htmlpagingbar;
+          $localhtml .= $tableDivStart . $subheading. $sortdropdown . $searchform  /*. $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . $backpackconnect;
       } else {
           $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
       }
@@ -489,7 +489,7 @@ class badgemaker_renderer extends core_badges_renderer {
             $table->data[] = $row;
         }
         $htmltable = html_writer::table($table);
-        return $htmlnew . /*$searchform .*/ $htmlpagingbar . $htmltable . $htmlpagingbar . $bmLogo;
+        return $htmlnew . /*$searchform .*/ /* $htmlpagingbar .*/ $htmltable . $htmlpagingbar . $bmLogo;
 
       }
         return $htmlnew . $bmLogo;
