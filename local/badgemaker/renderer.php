@@ -495,7 +495,7 @@ class badgemaker_renderer extends core_badges_renderer {
         return $htmlnew . $bmLogo;
     }
 
-    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40, $alignment = 'left', $userid = null, $profile = null) {
+    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40, $alignment = 'left', $userid = null, $profile = null, $useBadgeImageClass = true) {
       global $USER, $CFG;
       $badges = array();
       if (count($earnedBadges) > 0) {
@@ -510,7 +510,6 @@ class badgemaker_renderer extends core_badges_renderer {
       }
       foreach ($badges as $badge) {
           $earnedThisOne = in_array($badge, $earnedBadges);
-          $imageClass = $earnedThisOne ? 'small-badge-icon' : 'ghosted-small-badge-icon';
           $textClass = $earnedThisOne ? 'badge-name' : 'ghosted-badge-name';
           if (empty($external)) {
             $external = null;
@@ -526,7 +525,13 @@ class badgemaker_renderer extends core_badges_renderer {
 
           $name = html_writer::tag('span', $bname);//, array('class' => $textClass));
 
-          $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => $imageClass, 'height' => $badgesize, 'width' => $badgesize));
+          $imageAtts = array('src' => $imageurl, 'height' => $badgesize, 'width' => $badgesize);
+          if ($useBadgeImageClass) {
+            $imageClass = $earnedThisOne ? 'small-badge-icon' : 'ghosted-small-badge-icon';
+            $imageAtts['class'] = $imageClass;
+          }
+
+          $image = html_writer::empty_tag('img', $imageAtts);
           if (!empty($badge->dateexpire) && $badge->dateexpire < time()) {
               $image .= $this->output->pix_icon('i/expired',
                       get_string('expireddate', 'badges', userdate($badge->dateexpire)),

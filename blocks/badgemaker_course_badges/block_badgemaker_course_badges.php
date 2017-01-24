@@ -96,7 +96,7 @@ class block_badgemaker_course_badges extends block_base {
         $this->content->text .= html_writer::end_span();
         $this->content->text .= html_writer::end_div('course_badges_title');
 
-        $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 100, 'center');
+        $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 100, 'center', null, null, false);
 
         return $this->content;
 	}
