@@ -524,7 +524,7 @@ class badgemaker_renderer extends core_badges_renderer {
               $imageurl = $badge->imageUrl;
           }
 
-          $name = html_writer::tag('span', $bname, array('class' => $textClass));
+          $name = html_writer::tag('span', $bname);//, array('class' => $textClass));
 
           $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => $imageClass, 'height' => $badgesize, 'width' => $badgesize));
           if (!empty($badge->dateexpire) && $badge->dateexpire < time()) {
@@ -540,7 +540,7 @@ class badgemaker_renderer extends core_badges_renderer {
           $download = $status = $push = '';
           if ($earnedThisOne) {
             $di = $badge->dateissued;
-            $dateissued = html_writer::tag('span', userdate($di, '%d %B %y'), array('class' => $textClass));
+            $dateissued = html_writer::tag('span', '<br>'.userdate($di, '%d %B %y'));//, array('class' => $textClass));
             if (empty($userid)) {
               $userid = null;
             }
