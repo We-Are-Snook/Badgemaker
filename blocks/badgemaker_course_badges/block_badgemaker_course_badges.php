@@ -87,11 +87,16 @@ class block_badgemaker_course_badges extends block_base {
 
         // $this->content->text .= $output->heading("Badges: $earnedCount/$totalBadgeCount", 6);
 
+        $this->content->text .= html_writer::start_div('course_badges_title', array('align' => 'center'));
         $this->content->text .= html_writer::start_span('lead');
-        $this->content->text .= "Badges: $earnedCount/$totalBadgeCount";
+        $yhe = get_string('earned', 'block_badgemaker_course_badges');
+        $badgesString = get_string('badges', 'block_badgemaker_course_badges');
+        $ofString = get_string('of', 'block_badgemaker_course_badges');
+        $this->content->text .= "$yhe $earnedCount $ofString $totalBadgeCount $badgesString";
         $this->content->text .= html_writer::end_span();
+        $this->content->text .= html_writer::end_div('course_badges_title');
 
-        $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 40, 'center');
+        $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 100, 'center');
 
         return $this->content;
 	}
