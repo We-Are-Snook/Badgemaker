@@ -8,6 +8,7 @@
 
 global $CFG;
 
+require_once($CFG->dirroot . '/local/badgemaker/lib.php');
 require_once($CFG->libdir . "/badgeslib.php");
 
 class block_badgemaker_user_earned_total extends block_base {
