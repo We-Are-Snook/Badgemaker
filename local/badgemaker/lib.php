@@ -7,7 +7,61 @@
  */
 
 global $CFG;
- require_once($CFG->libdir . '/badgeslib.php');
+require_once($CFG->libdir . '/badgeslib.php');
+
+/*
+Badge bake that is identical to the original in 3.0-3.2 except that it uses the large badge image (f3) instead of the small one (f1)
+*/
+function local_badgemaker_badges_bake($hash, $badgeid, $userid = 0, $pathhash = false) {
+
+    global $CFG, $USER;
+    require_once(dirname(dirname(__FILE__)) . '/badges/lib/bakerlib.php');
+
+    $badge = new badge($badgeid);
+    $badge_context = $badge->get_context();
+    $userid = ($userid) ? $userid : $USER->id;
+    $user_context = context_user::instance($userid);
+
+    $fs = get_file_storage();
+    if (!$fs->file_exists($user_context->id, 'badges', 'userbadge', $badge->id, '/', $hash . '.png')) {
+        if ($file = $fs->get_file($badge_context->id, 'badges', 'badgeimage', $badge->id, '/', 'f3.png')) {
+            $contents = $file->get_content();
+
+            $filehandler = new PNG_MetaDataHandler($contents);
+            $assertion = new moodle_url('/badges/assertion.php', array('b' => $hash));
+            if ($filehandler->check_chunks("tEXt", "openbadges")) {
+                // Add assertion URL tExt chunk.
+                $newcontents = $filehandler->add_chunks("tEXt", "openbadges", $assertion->out(false));
+                $fileinfo = array(
+                        'contextid' => $user_context->id,
+                        'component' => 'badges',
+                        'filearea' => 'userbadge',
+                        'itemid' => $badge->id,
+                        'filepath' => '/',
+                        'filename' => $hash . '.png',
+                );
+
+                // Create a file with added contents.
+                $newfile = $fs->create_file_from_string($fileinfo, $newcontents);
+                if ($pathhash) {
+                    return $newfile->get_pathnamehash();
+                }
+            }
+        } else {
+            debugging('Error baking badge image!', DEBUG_DEVELOPER);
+            return;
+        }
+    }
+
+    // If file exists and we just need its path hash, return it.
+    if ($pathhash) {
+        $file = $fs->get_file($user_context->id, 'badges', 'userbadge', $badge->id, '/', $hash . '.png');
+        return $file->get_pathnamehash();
+    }
+
+    $fileurl = moodle_url::make_pluginfile_url($user_context->id, 'badges', 'userbadge', $badge->id, '/', $hash, true);
+    return $fileurl;
+}
 
  function local_badgemaker_autolink($str, $attributes=array()) {
    $str = str_replace("http://www","www",$str);
