@@ -60,7 +60,7 @@ class block_badgemaker_awarded_in_my_courses extends block_base {
 
         // Number of badges to display.
         if (!isset($this->config->numberofbadges)) {
-            $this->config->numberofbadges = 10;
+            $this->config->numberofbadges = 3;
         }
 
         // Create empty content.
@@ -102,6 +102,17 @@ class block_badgemaker_awarded_in_my_courses extends block_base {
         return null;
         // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_awarded_in_my_courses');
       }
+
+      $liblink = local_badgemaker_libraryPageURL();
+      $logolink = html_writer::start_div('library-button', array('align' => 'center'));
+      $logolink .= html_writer::tag('hr');
+      $logolink .= html_writer::start_tag('a', array('href' => $liblink));
+      $ls = local_badgemaker_logo_source();
+      $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
+      $logolink .= $img;
+      $logolink .= html_writer::end_tag('a');
+      $logolink .= html_writer::end_div('library-button');
+      $this->content->text .= $logolink;
 
       return $this->content;
 	}

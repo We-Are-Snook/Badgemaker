@@ -740,7 +740,7 @@ class badgemaker_renderer extends core_badges_renderer {
               $imageurl = $badge->imageUrl;
           }
           $di = $badge->dateissued;
-          $bname .= ' to '.html_writer::start_span('bold').$badge->firstname.' '.$badge->lastname.html_writer::end_span().' on '.userdate($di, '%d/%m/%y');
+          $bname .= ' to '.html_writer::start_span('bold').$badge->firstname.' '.$badge->lastname.html_writer::end_span().'<br>on '.userdate($di, '%d %B %y');
           $name = html_writer::tag('span', $bname, array('class' => 'badge-name'));
 
           $image = html_writer::empty_tag('img', array('src' => $imageurl, 'class' => 'badge-image'));
