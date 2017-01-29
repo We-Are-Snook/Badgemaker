@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -60,7 +60,7 @@ class block_badgemaker_newest_site_badges extends block_base {
 
         // Number of badges to display.
         if (!isset($this->config->numberofbadges)) {
-            $this->config->numberofbadges = 3;
+            $this->config->numberofbadges = 5;
         }
 
         // Create empty content.
@@ -76,10 +76,10 @@ class block_badgemaker_newest_site_badges extends block_base {
 
         if (count($badges) > 0){
             $output = new badgemaker_renderer($this->page, 'badges');
-            $this->content->text .= $output->print_meta_badges_list($badges, 'center');
+            $just = $this->instance->region === 'content' ? 'left' : 'center';
+            $this->content->text .= $output->print_meta_badges_list($badges, $just);
         } else {
           return null;
-          // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_newest_site_badges');
         }
 
         $this->content->text .= html_writer::tag('hr', '');
