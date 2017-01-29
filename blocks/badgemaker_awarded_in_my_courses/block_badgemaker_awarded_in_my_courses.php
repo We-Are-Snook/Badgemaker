@@ -105,7 +105,7 @@ class block_badgemaker_awarded_in_my_courses extends block_base {
 
       $liblink = local_badgemaker_libraryPageURL();
       $logolink = html_writer::start_div('library-button', array('align' => 'center'));
-      $logolink .= html_writer::tag('hr');
+      $logolink .= html_writer::tag('hr', '');
       $logolink .= html_writer::start_tag('a', array('href' => $liblink));
       $ls = local_badgemaker_logo_source();
       $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
