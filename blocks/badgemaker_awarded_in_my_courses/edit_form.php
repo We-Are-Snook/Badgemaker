@@ -16,6 +16,6 @@ class block_badgemaker_awarded_in_my_courses_edit_form extends block_edit_form {
         }
 
         $mform->addElement('select', 'config_numberofbadges', get_string('numbadgestodisplay', 'block_badgemaker_awarded_in_my_courses'), $numberofbadges);
-        $mform->setDefault('config_numberofbadges', 3);
+        $mform->setDefault('config_numberofbadges', 5);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-$string['pluginname'] = 'Badgemaker - Toolbox';
+$string['pluginname'] = 'BadgeMaker - Toolbox';
 $string['title'] = 'BadgeMaker Toolbox';
 $string['button_text'] = 'New Badge';
 $string['course_button_text'] = 'New Course Badge';

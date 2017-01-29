@@ -60,7 +60,7 @@ class block_badgemaker_awarded_in_my_courses extends block_base {
 
         // Number of badges to display.
         if (!isset($this->config->numberofbadges)) {
-            $this->config->numberofbadges = 3;
+            $this->config->numberofbadges = 5;
         }
 
         // Create empty content.
@@ -97,7 +97,8 @@ class block_badgemaker_awarded_in_my_courses extends block_base {
 	    // since we might have 10 x number of courses limit to only 10 overall.
       $allBadges = array_slice($allBadges, 0, $this->config->numberofbadges);
       if (count($allBadges)) {
-        $this->content->text .= $output->recent_course_badges_list($allBadges);
+        $just = $this->instance->region === 'content' ? 'left' : 'center';
+        $this->content->text .= $output->recent_course_badges_list($allBadges, null, null, $just);
       } else {
         return null;
         // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_awarded_in_my_courses');

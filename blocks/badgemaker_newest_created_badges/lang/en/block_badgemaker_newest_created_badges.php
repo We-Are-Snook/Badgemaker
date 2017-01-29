@@ -1,5 +1,5 @@
 <?php
-$string['pluginname'] = 'Badgemaker - Newest Created Badges';
+$string['pluginname'] = 'BadgeMaker - Newest Created Badges';
 $string['pluginname_for_course'] = 'Newest Course Badges';
 $string['pluginname_for_site'] = 'Newest Site Badges';
 $string['both_badge_types'] = 'Both';

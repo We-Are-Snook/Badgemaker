@@ -60,7 +60,7 @@ class block_badgemaker_newest_course_badges extends block_base {
 
         // Number of badges to display.
         if (!isset($this->config->numberofbadges)) {
-            $this->config->numberofbadges = 3;
+            $this->config->numberofbadges = 5;
         }
 
         // Create empty content.

@@ -16,7 +16,7 @@ class block_badgemaker_newest_created_badges_edit_form extends block_edit_form {
         }
 
         $mform->addElement('select', 'config_numberofnewestcreatedbadges', get_string('numbadgestodisplay', 'block_badgemaker_newest_created_badges'), $numberofbadges);
-        $mform->setDefault('config_numberofnewestcreatedbadges', 3);
+        $mform->setDefault('config_numberofnewestcreatedbadges', 5);
 
         $badgeTypes = array(0 => get_string('both_badge_types', 'block_badgemaker_newest_created_badges'), BADGE_TYPE_SITE => get_string('site_badge_types', 'block_badgemaker_newest_created_badges'), BADGE_TYPE_COURSE => get_string('course_badge_types', 'block_badgemaker_newest_created_badges'));
         $mform->addElement('select', 'config_typeofnewestcreatedbadges', get_string('typeofbadgetodisplay', 'block_badgemaker_newest_created_badges'), $badgeTypes);

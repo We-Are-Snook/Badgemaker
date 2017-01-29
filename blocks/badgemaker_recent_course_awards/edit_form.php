@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @package    BadgeMaker
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -16,6 +16,6 @@ class block_badgemaker_recent_course_awards_edit_form extends block_edit_form {
         }
 
         $mform->addElement('select', 'config_numberofbadges', get_string('numbadgestodisplay', 'block_badgemaker_recent_course_awards'), $numberofbadges);
-        $mform->setDefault('config_numberofbadges', 3);
+        $mform->setDefault('config_numberofbadges', 5);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @package    BadgeMaker
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 

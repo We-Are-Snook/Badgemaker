@@ -1,6 +1,6 @@
 <?php
 $string['title'] = 'Course Badges';
-$string['pluginname'] = 'Badgemaker - Course Badges';
+$string['pluginname'] = 'BadgeMaker - Course Badges';
 $string['newest_badges:addinstance'] = 'Add a block showing your badge status for this course';
 $string['newest_badges:myaddinstance'] = 'Add a block showing badge status for this course';
 $string['numbadgestodisplay'] = 'Maximum number of badges to display';
