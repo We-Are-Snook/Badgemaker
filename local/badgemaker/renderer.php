@@ -90,7 +90,7 @@ class badgemaker_renderer extends core_badges_renderer {
   }
 
   // used on my.php badge library page
-  public function badgemaker_render_badge_user_collection(badge_user_collection $badges, $totalBadgeCount = -1) {
+  public function badgemaker_render_badge_user_collection(badge_user_collection $badges, $withoutSearchCount = -1) {
       global $CFG, $USER, $SITE;
       $backpack = $badges->backpack;
       $mybackpack = new moodle_url('/badges/mybackpack.php');
@@ -109,57 +109,12 @@ class badgemaker_renderer extends core_badges_renderer {
           $backpackconnect = $this->output->box(get_string('localconnectto', 'badges', $mybackpack->out()), 'noticebox') . $breakTag;
       }
       // Search box.
-      $searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxalignleft');
+      //$searchform = $this->output->box($this->helper_search_form($badges->search), 'boxwidthwide boxalignleft');
 
       // Download all button.
       $downloadall = $this->output->single_button(
                   new moodle_url('/badges/mybadges.php', array('downloadall' => true, 'sesskey' => sesskey())),
                   get_string('downloadall'), 'POST', array('class' => 'activatebadge'));
-
-
-      // sort
-      // from management.php course and cateogyr management page, right had menu that has sort courses in middle.
-      // public function course_listing_actions(coursecat $category, course_in_list $course = null, $perpage = 20) {
-      $params = $this->page->url->params();
-      //$params['action'] = 'resortcourses';
-      //$params['sesskey'] = sesskey();
-      unset($params['dir']); // clear dir so we can have ASC by default.
-      $baseurl = new moodle_url('my.php', $params);
-      $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
-      $dateissueddescurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'ASC'));
-      $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
-      $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
-      $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
-      $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
-      $menu = new action_menu(array(
-          new action_menu_link_secondary($dateissuedurl,
-              null,
-              // get_string('sortbyx', 'moodle', get_string('date', 'local_badgemaker'))),
-              get_string('sort_dateissued_ascending', 'local_badgemaker')),
-          new action_menu_link_secondary($dateissueddescurl,
-              null,
-              // get_string('sortbyxreverse', 'moodle', get_string('date', 'local_badgemaker')))
-              get_string('sort_dateissued_descending', 'local_badgemaker')),
-          new action_menu_link_secondary($nameurl,
-              null,
-              // get_string('sortbyx', 'moodle', get_string('name', 'local_badgemaker'))),
-              get_string('sort_name_ascending', 'local_badgemaker')),
-          new action_menu_link_secondary($nameurldesc,
-              null,
-              // get_string('sortbyxreverse', 'moodle', get_string('name', 'local_badgemaker'))),
-              get_string('sort_name_descending', 'local_badgemaker')),
-          new action_menu_link_secondary($courseurl,
-              null,
-              // get_string('sortbyx', 'moodle', get_string('course', 'local_badgemaker'))),
-              get_string('sort_course_ascending', 'local_badgemaker')), // uses fullname
-          new action_menu_link_secondary($courseurldesc,
-              null,
-              // get_string('sortbyxreverse', 'moodle', get_string('course', 'local_badgemaker'))),
-              get_string('sort_course_descending', 'local_badgemaker'))
-      ));
-      $menu->set_menu_trigger(get_string('sort_badges', 'local_badgemaker'));
-      // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
-      $sortdropdown = $this->render($menu);//html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions'));//, 'style' => 'float: left'));
 
       // Local badges.
       $localhtml = '';
@@ -167,23 +122,13 @@ class badgemaker_renderer extends core_badges_renderer {
       // $localhtml .= $this->output->heading_with_help($heading, 'localbadgesh', 'badges');
       $tableDivStart = html_writer::start_tag('div', array('id' => 'issued-badge-table', 'class' => 'generalbox'));
 
-
       $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
-      $allBadgesCount = count($badges->badges);
 
-      if ($allBadgesCount > 0 || $totalBadgeCount > 0) {
-          if ($totalBadgeCount < 0) {
-            $bes = "$allBadgesCount " . get_string('badges_earned_heading', 'local_badgemaker');
-            $subheading = $this->output->heading($bes , 2, 'activatebadge');
-        } else {
-
-          $subheading = $this->output->heading("".count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $totalBadgeCount . ' ' . $downloadall, 2, 'activatebadge');
-        }
-
+      if (count($badges->badges) > 0 || $withoutSearchCount > 0) {
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart . $subheading. $sortdropdown . $searchform  /*. $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . $backpackconnect;
+          $localhtml .= $tableDivStart /*. $subheading . $searchform  . $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . 'info help button' . $backpackconnect;
       } else {
-          $localhtml .= $searchform . $this->output->notification(get_string('nobadges', 'badges'));
+          $localhtml .= /*$searchform .*/ $this->output->notification(get_string('nobadges', 'badges'));
       }
       $localhtml .= $bmLogo;
       $localhtml .= html_writer::end_tag('div');
@@ -216,6 +161,7 @@ class badgemaker_renderer extends core_badges_renderer {
 
     // A combo of render_badge_user_collection and the table from render_badge_management
     // Search box is moved above heading so it is obvious it is for both tables in the badge library.
+    /*
     protected function render_badge_user_collection(badge_user_collection $badges)
     {
         global $CFG, $USER, $SITE;
@@ -351,6 +297,8 @@ class badgemaker_renderer extends core_badges_renderer {
 
         return $localhtml;//$htmlpagingbar . $localhtml . $htmlpagingbar;
     }
+    */
+
 // returns true if has any action, used to display the actions and status column in the badge library table.
     function has_any_action_capability()
     {
@@ -364,6 +312,7 @@ class badgemaker_renderer extends core_badges_renderer {
             'moodle/badges:deletebadge'), $PAGE->context);
     }
 
+    // called from all.php via $output->render($badges)
     // Copied from badges renderer and following modifications made:
     //  - Criteria changed for course.
     //  - actions column shown if has any action capability.
@@ -385,113 +334,113 @@ class badgemaker_renderer extends core_badges_renderer {
 //        }
 
     // Badgemaker Logo
-    $bmLogo = badgemaker_badgemaker_logo_with_link();
+        $bmLogo = badgemaker_badgemaker_logo_with_link();
 
-      if ($badges->totalcount > 0) {
+        if ($badges->totalcount > 0) {
 
-        $htmlpagingbar = $this->render($paging);
-        // var_dump($htmlpagingbar);die();
-        $table = new html_table();
-        $table->attributes['class'] = 'collection';
+            $htmlpagingbar = $this->render($paging);
+            // var_dump($htmlpagingbar);die();
+            $table = new html_table();
+            $table->attributes['class'] = 'collection';
 
-        $sortbyname = $this->helper_sortable_heading(get_string('name'),
-            'name', $badges->sort, $badges->dir);
-        $sortbystatus = $this->helper_sortable_heading(get_string('status', 'badges'),
-              'status', $badges->sort, $badges->dir);
-        $sortbycourse = $this->helper_sortable_heading(get_string('course', 'moodle'),
-              'course', $badges->sort, $badges->dir); // MH
-        $sortbyrecipients = $this->helper_sortable_heading(get_string('awards', 'badges'), // needs query changed
-             'recipients', $badges->sort, $badges->dir); // MH recipients
-        $table->head = array(
-            $sortbyname,
-            // MH $sortbystatus,
-            // MH get_string('bcriteria', 'badges'),
-            // MHget_string('awards', 'badges')
-            // MH get_string('actions')
-        );
+            $sortbyname = $this->helper_sortable_heading(get_string('name'),
+                'name', $badges->sort, $badges->dir);
+            $sortbystatus = $this->helper_sortable_heading(get_string('status', 'badges'),
+                  'status', $badges->sort, $badges->dir);
+            $sortbycourse = $this->helper_sortable_heading(get_string('course', 'moodle'),
+                  'course', $badges->sort, $badges->dir); // MH
+            $sortbyrecipients = $this->helper_sortable_heading(get_string('awards', 'badges'), // needs query changed
+                 'recipients', $badges->sort, $badges->dir); // MH recipients
+            $table->head = array(
+                $sortbyname,
+                // MH $sortbystatus,
+                // MH get_string('bcriteria', 'badges'),
+                // MHget_string('awards', 'badges')
+                // MH get_string('actions')
+            );
 
-        // MB The class of the column determines justification, let's try status when we want centered and name when we want left
-        // $justifyCenterClass = 'status';
-        // $justifyLeftClass = 'name';
-        // $justifyClass = $justifyLeftClass;
+            // MB The class of the column determines justification, let's try status when we want centered and name when we want left
+            // $justifyCenterClass = 'status';
+            // $justifyLeftClass = 'name';
+            // $justifyClass = $justifyLeftClass;
 
-        $table->colclasses = array('badgemaker-name'); // MH $table->colclasses = array('name', 'status', 'criteria', 'awards', 'actions');
-        // MH
-        if (has_capability('moodle/badges:createbadge', $this->page->context)) {
-            $table->colclasses[] = 'badgemaker-status';
-            $table->head[] = $sortbystatus;
-        }
-        $table->colclasses[] = 'badgemaker-course';
-        $table->head[] = $sortbycourse;
-
-        $table->colclasses[] = 'badgemaker-awards'; // recipients
-        $table->head[] =  $sortbyrecipients;//get_string('awards', 'badges'); //$sortbyrecipients;
-
-        if($this->has_any_action_capability()){
-          $actionhead = get_string('actions');
-            $table->head[] = $actionhead;
-            $table->colclasses[] = 'badgemaker-actions';//get_string('actions');
-        }
-
-        $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
-
-        // foreach ($badges->badges as $b) {
-        foreach ($pageBadges as $b) {
-            $style = !$b->is_active() ? array('class' => 'dimmed') : array();
-
+            $table->colclasses = array('badgemaker-name'); // MH $table->colclasses = array('name', 'status', 'criteria', 'awards', 'actions');
             // MH
-            $context = $this->page->context;
-            if($b->type == BADGE_TYPE_COURSE){
-              try {
-                $context = context_course::instance($b->courseid);
-              } catch (Exception $e) {
-                // context should be null anyway after the line in the try fails.
-              //  $context = null;
-              }
-
+            if (has_capability('moodle/badges:createbadge', $this->page->context)) {
+                $table->colclasses[] = 'badgemaker-status';
+                $table->head[] = $sortbystatus;
             }
+            $table->colclasses[] = 'badgemaker-course';
+            $table->head[] = $sortbycourse;
 
-            $pbi = "";
-            if ($context) {
-              $pbi = print_badge_image($b, $context) . ' ';
-            }
-            $forlink =  $pbi . // MH $forlink =  print_badge_image($b, $this->page->context) . ' ' .
-                html_writer::start_tag('span') . $b->name . html_writer::end_tag('span');
+            $table->colclasses[] = 'badgemaker-awards'; // recipients
+            $table->head[] =  $sortbyrecipients;//get_string('awards', 'badges'); //$sortbyrecipients;
 
-            $name = html_writer::link(new moodle_url('/badges/overview.php', array('id' => $b->id)), $forlink, $style);
-            $status = $b->statstring;
-
-            if($b->type == BADGE_TYPE_SITE) {
-                $course = "N/A";
-            }else{
-                $course = $b->courseFullname; // MH $criteria = self::print_badge_criteria($b, 'short');
-            }
-
-            if ($this->has_any_action_capability()) {
-                $awards = html_writer::link(new moodle_url('/badges/recipients.php', array('id' => $b->id)), $b->awards);
-            } else {
-                $awards = $b->awards;
-            }
-
-            $row = array($name); // MH $row = array($name, $status, $criteria, $awards, $actions);
-
-            // MH
-            if ($this->has_any_action_capability()) {
-                $row[] = $status;
-            }
-            $row[] = $course;
-            $row[] = $awards;
             if($this->has_any_action_capability()){
-                $actions = self::print_badge_table_actions($b, $this->page->context);
-                $row[] = $actions;
+              $actionhead = get_string('actions');
+                $table->head[] = $actionhead;
+                $table->colclasses[] = 'badgemaker-actions';//get_string('actions');
             }
 
-            $table->data[] = $row;
-        }
-        $htmltable = html_writer::table($table);
-        return $htmlnew . /*$searchform .*/ /* $htmlpagingbar .*/ $htmltable . $htmlpagingbar . $bmLogo;
+            $pageBadges = array_slice($badges->badges, $badges->page * $badges->perpage, $badges->perpage);
 
-      }
+            // foreach ($badges->badges as $b) {
+            foreach ($pageBadges as $b) {
+                $style = !$b->is_active() ? array('class' => 'dimmed') : array();
+
+                // MH
+                $context = $this->page->context;
+                if($b->type == BADGE_TYPE_COURSE){
+                  try {
+                    $context = context_course::instance($b->courseid);
+                  } catch (Exception $e) {
+                    // context should be null anyway after the line in the try fails.
+                  //  $context = null;
+                  }
+
+                }
+
+                $pbi = "";
+                if ($context) {
+                  $pbi = print_badge_image($b, $context) . ' ';
+                }
+                $forlink =  $pbi . // MH $forlink =  print_badge_image($b, $this->page->context) . ' ' .
+                    html_writer::start_tag('span') . $b->name . html_writer::end_tag('span');
+
+                $name = html_writer::link(new moodle_url('/badges/overview.php', array('id' => $b->id)), $forlink, $style);
+                $status = $b->statstring;
+
+                if($b->type == BADGE_TYPE_SITE) {
+                    $course = "N/A";
+                }else{
+                    $course = $b->courseFullname; // MH $criteria = self::print_badge_criteria($b, 'short');
+                }
+
+                if ($this->has_any_action_capability()) {
+                    $awards = html_writer::link(new moodle_url('/badges/recipients.php', array('id' => $b->id)), $b->awards);
+                } else {
+                    $awards = $b->awards;
+                }
+
+                $row = array($name); // MH $row = array($name, $status, $criteria, $awards, $actions);
+
+                // MH
+                if ($this->has_any_action_capability()) {
+                    $row[] = $status;
+                }
+                $row[] = $course;
+                $row[] = $awards;
+                if($this->has_any_action_capability()){
+                    $actions = self::print_badge_table_actions($b, $this->page->context);
+                    $row[] = $actions;
+                }
+
+                $table->data[] = $row;
+            }
+            $htmltable = html_writer::table($table);
+            return $htmlnew . /*$searchform .*/ /* $htmlpagingbar .*/ $htmltable . $htmlpagingbar . $bmLogo;
+
+        }
         return $htmlnew . $bmLogo;
     }
 
@@ -915,8 +864,6 @@ class badgemaker_renderer extends core_badges_renderer {
 
         $html .= html_writer::end_div();
 
-           // $html .= "</div>";
-
             /*
             if ($viewmode === 'courses') {
                 $categories = coursecat::make_categories_list(array('moodle/category:manage', 'moodle/course:create'));
@@ -929,18 +876,11 @@ class badgemaker_renderer extends core_badges_renderer {
                 $html .= $this->render($select);
             }
             */
-            // $html .= html_writer::end_div();
-
-        //$html .= '<div style="clear: both;"></div>';
-    //    $html .= html_writer::end_div();
 
          $searchform = $this->helper_search_form($search);
-        //  $html .= "<div style=\"float: left;\">";
          $html .= $searchform;
-        //  $html .= "</div>";
+        $html .= html_writer::end_div();
 
         return $html;
     }
-
-
 }

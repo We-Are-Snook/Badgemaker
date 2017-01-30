@@ -139,6 +139,8 @@ $params = array('page' => $page);
 $baseurl = new moodle_url($path, $params);
 local_badgemaker_library_print_heading($baseurl, $title, 'localbadgesh', 'badges');
 
+
+
 // echo "Sorting by $sortby in dir $sorthow";
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
 
@@ -149,6 +151,7 @@ if (empty($search)) {
   // echo "SEARCH ACTIVE";
   $withoutSearchCount = count(local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id));
 }
+
 $totalcount = count($records);
 
 $userbadges = new badge_user_collection($records, $USER->id);
@@ -158,6 +161,17 @@ $userbadges->page = $page;
 $userbadges->perpage = $badgesPerPage;
 $userbadges->totalcount = $totalcount;
 $userbadges->search = $search;
+
+if ($withoutSearchCount < 0) {
+    $bes = $totalcount . ' ' . get_string('badges_earned_heading', 'local_badgemaker');
+    $subheading = $output->heading($bes , 2, 'activatebadge');
+} else {
+    $pageBadges = array_slice($userbadges->badges, $userbadges->page * $userbadges->perpage, $userbadges->perpage);
+    $subheading = $output->heading(count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $withoutSearchCount . ' ', 2, 'activatebadge');
+}
+
+$menu = local_badgemaker_sort_menu();
+echo $output->library_heading($subheading, 'Sort by: ', $menu, $search);
 
 echo $output->badgemaker_render_badge_user_collection($userbadges, $withoutSearchCount);
 

@@ -71,3 +71,56 @@ function local_badgemaker_view_mode_menu(array $modes, $currentmode, moodle_url 
 
     return $menu;
 }
+
+function local_badgemaker_sort_menu()//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
+{
+    global $PAGE;
+    // sort
+    // from management.php course and cateogyr management page, right had menu that has sort courses in middle.
+    // public function course_listing_actions(coursecat $category, course_in_list $course = null, $perpage = 20) {
+    $params = $PAGE->url->params();
+    //$params['action'] = 'resortcourses';
+    //$params['sesskey'] = sesskey();
+    //unset($params['dir']); // clear dir so we can have ASC by default.
+    $baseurl = new moodle_url('my.php', $params);
+    $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
+    $dateissueddescurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'ASC'));
+    $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
+    $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
+    $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
+    $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
+
+    $sorts = [];
+    $sorts[] = ['url' => $dateissuedurl, 'title' => get_string('sort_dateissued_ascending', 'local_badgemaker')];
+    $sorts[] = ['url' => $dateissueddescurl, 'title' => get_string('sort_dateissued_descending', 'local_badgemaker')];
+    $sorts[] = ['url' => $nameurl, 'title' => get_string('sort_name_ascending', 'local_badgemaker')];
+    $sorts[] = ['url' => $nameurldesc, 'title' => get_string('sort_name_descending', 'local_badgemaker')];
+    $sorts[] = ['url' => $courseurl, 'title' => get_string('sort_course_ascending', 'local_badgemaker')];
+    $sorts[] = ['url' => $courseurldesc, 'title' => get_string('sort_course_descending', 'local_badgemaker')];
+
+    $actions = [];
+    $firstSort = $sorts[0];
+    $trigger = $firstSort['title'];
+    foreach ($sorts as $sort){
+        $url = $sort['url'];
+        $title = $sort['title'];
+        echo 'a';
+        if( array_key_exists('sort', $params) && $params['sort'] == $url->param['sort']){
+            echo 'b';
+            if( array_key_exists('dir', $params) && $params['dir'] == $url->param['dir']) {
+                echo 'c';
+                $trigger = $title;
+            }
+        }
+        $actions[] =  new action_menu_link_secondary($url,
+            null,
+            $title);
+    }
+
+    $menu = new action_menu($actions);
+
+    $menu->set_menu_trigger($trigger);
+    // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');
+    //$sortdropdown = $this->render($menu);//html_writer::tag('div', $this->render($menu), array('class' => 'listing-actions course-listing-actions'));//, 'style' => 'float: left'));
+    return $menu;
+}
