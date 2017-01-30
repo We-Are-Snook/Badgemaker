@@ -244,7 +244,7 @@ $viewmodes = array( // MH
     'course' => get_string('course_badges', 'local_badgemaker'),
     'site' => get_string('site_badges', 'local_badgemaker')
 );
-$menu = local_badgemaker_view_mode_menu($viewmodes, $viewmode);
+$menu = local_badgemaker_library_view_mode_menu($viewmodes, $viewmode);
 echo $output->library_heading($libhead, get_string('viewing'), $menu, $badges->search);
 
 //echo $output->heading('All badges available on this site');

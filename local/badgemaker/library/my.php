@@ -170,7 +170,7 @@ if ($withoutSearchCount < 0) {
     $subheading = $output->heading(count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $withoutSearchCount . ' ', 2, 'activatebadge');
 }
 
-$menu = local_badgemaker_sort_menu($sortby, $sorthow);
+$menu = local_badgemaker_library_sort_menu($sortby, $sorthow);
 echo $output->library_heading($subheading, 'Sort by: ', $menu, $search);
 
 echo $output->badgemaker_render_badge_user_collection($userbadges, $withoutSearchCount);

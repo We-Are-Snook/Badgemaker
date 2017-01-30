@@ -37,7 +37,7 @@ function local_badgemaker_library_print_heading(moodle_url $currenturl, $title =
 }
 
 // modified from $managementRenderer->view_mode_selector
-function local_badgemaker_view_mode_menu(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
+function local_badgemaker_library_view_mode_menu(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
     if ($url === null) {
         global $PAGE;
         $url = $PAGE->url;
@@ -72,7 +72,7 @@ function local_badgemaker_view_mode_menu(array $modes, $currentmode, moodle_url 
     return $menu;
 }
 
-function local_badgemaker_sort_menu($currSortBy = null, $currSortHow = null)//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
+function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = null)//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
 {
     global $PAGE;
     // sort
@@ -83,13 +83,13 @@ function local_badgemaker_sort_menu($currSortBy = null, $currSortHow = null)//ar
     //$params['sesskey'] = sesskey();
     //unset($params['dir']); // clear dir so we can have ASC by default.
     $baseurl = new moodle_url('my.php', $params);
+
     $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
     $dateissueddescurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'ASC'));
     $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
     $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
     $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
     $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
-
     $sorts = [];
     $sorts[] = ['url' => $dateissuedurl, 'title' => get_string('sort_dateissued_ascending', 'local_badgemaker')];
     $sorts[] = ['url' => $dateissueddescurl, 'title' => get_string('sort_dateissued_descending', 'local_badgemaker')];
@@ -98,32 +98,20 @@ function local_badgemaker_sort_menu($currSortBy = null, $currSortHow = null)//ar
     $sorts[] = ['url' => $courseurl, 'title' => get_string('sort_course_ascending', 'local_badgemaker')];
     $sorts[] = ['url' => $courseurldesc, 'title' => get_string('sort_course_descending', 'local_badgemaker')];
 
-    $triggerName = $sorts[0];
-    switch ($currSortBy) {
-      case 'name':
-        $triggerName = $currSortHow === 'ASC' ? $sorts[2]['title'] : $sorts[3]['title'];
-      break;
-      case 'course':
-        $triggerName = $currSortHow === 'ASC' ? $sorts[4]['title'] : $sorts[5]['title'];
-      break;
-      case 'dateissued':
-        $triggerName = $currSortHow === 'ASC' ? $sorts[1]['title'] : $sorts[0]['title'];
-      break;
-      default:
-        $triggerName = $sorts[1]['title'];
-      break;
-    }
     $actions = [];
     $firstSort = $sorts[0];
-    $trigger = $triggerName;//$firstSort['title'];
+    $trigger = $firstSort['title'];
+    
     foreach ($sorts as $sort){
         $url = $sort['url'];
         $title = $sort['title'];
-        echo 'a';
-        if( array_key_exists('sort', $params) && $params['sort'] == $url->param['sort']){
-            echo 'b';
-            if( array_key_exists('dir', $params) && $params['dir'] == $url->param['dir']) {
-                echo 'c';
+        //print_r($url->params());
+        if( $currSortBy == $url->param('sort')){
+            $dir = $url->param('dir');
+            if(!$dir){
+                $dir = 'ASC';
+            }
+            if( $currSortHow == $dir) {
                 $trigger = $title;
             }
         }
