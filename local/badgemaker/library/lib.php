@@ -82,11 +82,11 @@ function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = n
     unset($params['dir']); // clear dir
     $baseurl = new moodle_url('my.php', $params);
 
-    $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
+    $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'DESC'));
     $dateissueddescurl = new moodle_url($baseurl, array('sort' => 'dateissued', 'dir' => 'ASC'));
-    $nameurl = new moodle_url($baseurl, array('sort' => 'name'));
+    $nameurl = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'ASC'));
     $nameurldesc = new moodle_url($baseurl, array('sort' => 'name', 'dir' => 'DESC'));
-    $courseurl = new moodle_url($baseurl, array('sort' => 'course'));
+    $courseurl = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'ASC'));
     $courseurldesc = new moodle_url($baseurl, array('sort' => 'course', 'dir' => 'DESC'));
     $sorts = [];
     $sorts[] = ['url' => $dateissuedurl, 'title' => get_string('sort_dateissued_ascending', 'local_badgemaker')];
@@ -105,11 +105,7 @@ function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = n
         $title = $sort['title'];
 
         if( $currSortBy == $url->param('sort')){
-            $dir = $url->param('dir');
-            if(!$dir){
-                $dir = 'ASC';
-            }
-            if( $currSortHow == $dir) {
+            if( $currSortHow == $url->param('dir')) {
                 $trigger = $title;
             }
         }
