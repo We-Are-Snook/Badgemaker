@@ -10,12 +10,14 @@ global $CFG;
 require_once($CFG->libdir . '/badgeslib.php');
 
 /*
-Badge bake that is identical to the original in 3.0-3.2 except that it uses the large badge image (f3) instead of the small one (f1)
+Badge bake that is identical to the original in 3.0-3.2 except that it uses the large badge image (f3) instead of the small one (f1), and pulls in the required file using the CFG var instead of the dirname
 */
 function local_badgemaker_badges_bake($hash, $badgeid, $userid = 0, $pathhash = false) {
 
     global $CFG, $USER;
-    require_once(dirname(dirname(__FILE__)) . '/badges/lib/bakerlib.php');
+
+    // require_once(dirname(dirname(__FILE__)) . '/badges/lib/bakerlib.php');
+    require_once($CFG->dirroot . '/badges/lib/bakerlib.php');
 
     $badge = new badge($badgeid);
     $badge_context = $badge->get_context();
@@ -754,6 +756,3 @@ function local_badgemaker_get_badges($type = 0, $courseid = 0, $sort = '', $dir 
     }
     return $badges;
 }
-
-
-
