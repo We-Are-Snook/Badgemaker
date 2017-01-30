@@ -45,7 +45,7 @@ if (!in_array($sortby, array('name', 'course', 'dateissued'))) {
     $sortby = 'dateissued';
 }
 
-if ($sorthow != 'ASC' and $sorthow != 'DESC') {
+if ($sorthow != 'ASC' && $sorthow != 'DESC') {
     if($sortby == 'dateissued') {
         $sorthow = 'DESC';
     }else{
@@ -63,19 +63,19 @@ $err = '';
 $url = new moodle_url($path); // '/badges/index.php'
 
 // we put in any params that are not the defaults
-if($sortby == 'dateissued') {
-    // default is descneind so store if is opposite.
-    if ($sorthow !== 'DESC') {
-        $url->param('dir', $sorthow);
-    }
-}
-else {
-    // if the sort isnt by date issued then the default is ascending
-    $url->param('sort', $sortby);
-    if ($sorthow !== 'ASC') {
-        $url->param('dir', $sorthow);
-    }
-}
+// if($sortby == 'dateissued') {
+//     // default is descneind so store if is opposite.
+//     if ($sorthow !== 'DESC') {
+//         $url->param('dir', $sorthow);
+//     }
+// }
+// else {
+//     // if the sort isnt by date issued then the default is ascending
+//     $url->param('sort', $sortby);
+//     if ($sorthow !== 'ASC') {
+//         $url->param('dir', $sorthow);
+//     }
+// }
 
 if($search !== ''){
     $url->param('search', $search);
@@ -170,7 +170,7 @@ if ($withoutSearchCount < 0) {
     $subheading = $output->heading(count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $withoutSearchCount . ' ', 2, 'activatebadge');
 }
 
-$menu = local_badgemaker_sort_menu();
+$menu = local_badgemaker_sort_menu($sortby, $sorthow);
 echo $output->library_heading($subheading, 'Sort by: ', $menu, $search);
 
 echo $output->badgemaker_render_badge_user_collection($userbadges, $withoutSearchCount);

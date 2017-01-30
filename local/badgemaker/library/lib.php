@@ -72,7 +72,7 @@ function local_badgemaker_view_mode_menu(array $modes, $currentmode, moodle_url 
     return $menu;
 }
 
-function local_badgemaker_sort_menu()//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
+function local_badgemaker_sort_menu($currSortBy = null, $currSortHow = null)//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
 {
     global $PAGE;
     // sort
@@ -98,9 +98,24 @@ function local_badgemaker_sort_menu()//array $sorts, $currentmode, moodle_url $u
     $sorts[] = ['url' => $courseurl, 'title' => get_string('sort_course_ascending', 'local_badgemaker')];
     $sorts[] = ['url' => $courseurldesc, 'title' => get_string('sort_course_descending', 'local_badgemaker')];
 
+    $triggerName = $sorts[0];
+    switch ($currSortBy) {
+      case 'name':
+        $triggerName = $currSortHow === 'ASC' ? $sorts[2]['title'] : $sorts[3]['title'];
+      break;
+      case 'course':
+        $triggerName = $currSortHow === 'ASC' ? $sorts[4]['title'] : $sorts[5]['title'];
+      break;
+      case 'dateissued':
+        $triggerName = $currSortHow === 'ASC' ? $sorts[1]['title'] : $sorts[0]['title'];
+      break;
+      default:
+        $triggerName = $sorts[1]['title'];
+      break;
+    }
     $actions = [];
     $firstSort = $sorts[0];
-    $trigger = $firstSort['title'];
+    $trigger = $triggerName;//$firstSort['title'];
     foreach ($sorts as $sort){
         $url = $sort['url'];
         $title = $sort['title'];
