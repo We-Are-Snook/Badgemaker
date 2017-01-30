@@ -140,7 +140,6 @@ $baseurl = new moodle_url($path, $params);
 local_badgemaker_library_print_heading($baseurl, $title, 'localbadgesh', 'badges');
 
 
-
 // echo "Sorting by $sortby in dir $sorthow";
 $records = local_badgemaker_get_badges(0, 0, $sortby, $sorthow, 0, 0, $USER->id, $search);
 

@@ -58,13 +58,13 @@ class badgemaker_renderer extends core_badges_renderer {
                   $action = new component_action('click', 'addtobackpack', array('assertion' => $assertion->out(false)));
                   $push = $this->output->action_icon(new moodle_url('#'), new pix_icon('t/backpack', get_string('addtobackpack', 'badges')), $action);
               }
-
+              global $PAGE;
               $download = $this->output->action_icon($url, new pix_icon('t/download', get_string('download')));
               if ($badge->visible) {
-                  $url = new moodle_url('my.php', array('hide' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $url = new moodle_url($PAGE->url/*'my.php'*/, array('hide' => $badge->issuedid, 'sesskey' => sesskey()));
                   $status = $this->output->action_icon($url, new pix_icon('t/hide', get_string('makeprivate', 'badges')));
               } else {
-                  $url = new moodle_url('my.php', array('show' => $badge->issuedid, 'sesskey' => sesskey()));
+                  $url = new moodle_url($PAGE->url/*'my.php'*/, array('show' => $badge->issuedid, 'sesskey' => sesskey()));
                   $status = $this->output->action_icon($url, new pix_icon('t/show', get_string('makepublic', 'badges')));
               }
           }
