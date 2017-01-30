@@ -72,16 +72,13 @@ function local_badgemaker_library_view_mode_menu(array $modes, $currentmode, moo
     return $menu;
 }
 
+// sort
+// from management.php course and cateogyr management page, right had menu that has sort courses in middle.
+// public function course_listing_actions(coursecat $category, course_in_list $course = null, $perpage = 20) {
 function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = null)//array $sorts, $currentmode, moodle_url $url = null, $param = 'view')
 {
     global $PAGE;
-    // sort
-    // from management.php course and cateogyr management page, right had menu that has sort courses in middle.
-    // public function course_listing_actions(coursecat $category, course_in_list $course = null, $perpage = 20) {
     $params = $PAGE->url->params();
-    //$params['action'] = 'resortcourses';
-    //$params['sesskey'] = sesskey();
-    //unset($params['dir']); // clear dir so we can have ASC by default.
     $baseurl = new moodle_url('my.php', $params);
 
     $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
@@ -105,7 +102,7 @@ function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = n
     foreach ($sorts as $sort){
         $url = $sort['url'];
         $title = $sort['title'];
-        //print_r($url->params());
+
         if( $currSortBy == $url->param('sort')){
             $dir = $url->param('dir');
             if(!$dir){

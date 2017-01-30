@@ -41,3 +41,6 @@ $string['sort_course_ascending'] = 'Course (A to Z)';
 $string['sort_course_descending'] = 'Course (Z to A)';
 $string['sort_dateissued_ascending'] = 'Newly awarded'; // awarded sounds better for a badge than issued
 $string['sort_dateissued_descending'] = 'Oldest awarded';
+
+$string['downloadallh'] = 'Download all my badges from this web site';
+$string['downloadallh_help'] = 'You can download all of your badges or each badge separately and save them on your computer. Downloaded badges can be added to your external backpack service.';

@@ -33,7 +33,7 @@ $hash        = optional_param('hash', '', PARAM_ALPHANUM);
 $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
-$badgesPerPage = 10;
+$badgesPerPage = 1;
 
 if ($clearsearch) {
     $search = '';
@@ -63,19 +63,19 @@ $err = '';
 $url = new moodle_url($path); // '/badges/index.php'
 
 // we put in any params that are not the defaults
-// if($sortby == 'dateissued') {
-//     // default is descneind so store if is opposite.
-//     if ($sorthow !== 'DESC') {
-//         $url->param('dir', $sorthow);
-//     }
-// }
-// else {
-//     // if the sort isnt by date issued then the default is ascending
-//     $url->param('sort', $sortby);
-//     if ($sorthow !== 'ASC') {
-//         $url->param('dir', $sorthow);
-//     }
-// }
+ if($sortby == 'dateissued') {
+     // default is descneind so store if is opposite.
+     if ($sorthow !== 'DESC') {
+         $url->param('dir', $sorthow);
+     }
+ }
+ else {
+     // if the sort isnt by date issued then the default is ascending
+     $url->param('sort', $sortby);
+     if ($sorthow !== 'ASC') {
+         $url->param('dir', $sorthow);
+     }
+ }
 
 if($search !== ''){
     $url->param('search', $search);

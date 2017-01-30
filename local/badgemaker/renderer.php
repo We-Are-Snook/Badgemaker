@@ -118,6 +118,8 @@ class badgemaker_renderer extends core_badges_renderer {
                   new moodle_url('/badges/mybadges.php', array('downloadall' => true, 'sesskey' => sesskey())),
                   get_string('downloadall'), 'POST', array('class' => 'activatebadge'));
 
+      $downloadAllInfo = $this->help_icon('downloadallh', 'local_badgemaker');
+
       // Local badges.
       $localhtml = '';
       // $heading = get_string('localbadges', 'badges', format_string($SITE->fullname, true, array('context' => context_system::instance())));
@@ -128,7 +130,7 @@ class badgemaker_renderer extends core_badges_renderer {
 
       if (count($badges->badges) > 0 || $withoutSearchCount > 0) {
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart /*. $subheading . $searchform  . $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . 'info help button' . $backpackconnect;
+          $localhtml .= $tableDivStart /*. $subheading . $searchform  . $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . $downloadAllInfo . $backpackconnect;
       } else {
           $localhtml .= /*$searchform .*/ $this->output->notification(get_string('nobadges', 'badges'));
       }
