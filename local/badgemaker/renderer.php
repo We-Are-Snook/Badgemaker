@@ -101,6 +101,8 @@ class badgemaker_renderer extends core_badges_renderer {
 
       $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
       // die("There are $badges->totalcount that should be shown $badges->perpage per page and we want page $badges->page now");
+      echo "<br>paging bar url is ".$this->page->url."<br><br>";
+
       $htmlpagingbar = $this->render($paging);
 
       // Set backpack connection string.
@@ -320,6 +322,7 @@ class badgemaker_renderer extends core_badges_renderer {
     protected function render_badge_management(badge_management $badges) {
       // var_dump($badges);die();
         $paging = new paging_bar($badges->totalcount, $badges->page, $badges->perpage, $this->page->url, 'page');
+        echo "<br>paging bar url is ".$this->page->url."<br><br>";
         // var_dump($paging);die();
         $htmlnew = '';
 
