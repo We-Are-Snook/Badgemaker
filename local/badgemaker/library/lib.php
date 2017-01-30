@@ -79,6 +79,7 @@ function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = n
 {
     global $PAGE;
     $params = $PAGE->url->params();
+    unset($params['dir']); // clear dir
     $baseurl = new moodle_url('my.php', $params);
 
     $dateissuedurl = new moodle_url($baseurl, array('sort' => 'dateissued'));
