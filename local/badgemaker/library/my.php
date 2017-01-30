@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -165,8 +165,8 @@ if ($withoutSearchCount < 0) {
     $bes = $totalcount . ' ' . get_string('badges_earned_heading', 'local_badgemaker');
     $subheading = $output->heading($bes , 2, 'activatebadge');
 } else {
-    $pageBadges = array_slice($userbadges->badges, $userbadges->page * $userbadges->perpage, $userbadges->perpage);
-    $subheading = $output->heading(count($pageBadges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $withoutSearchCount . ' ', 2, 'activatebadge');
+    // $pageBadges = array_slice($userbadges->badges, $userbadges->page * $userbadges->perpage, $userbadges->perpage);
+    $subheading = $output->heading(count($userbadges->badges) . ' ' . get_string('matching_badges_out_of', 'local_badgemaker') . ' ' . $withoutSearchCount . ' ', 2, 'activatebadge');
 }
 
 $menu = local_badgemaker_library_sort_menu($sortby, $sorthow);
