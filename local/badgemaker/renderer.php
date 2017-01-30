@@ -864,46 +864,7 @@ class badgemaker_renderer extends core_badges_renderer {
 //    }
 
 
-// filter
-    public function badgemaker_view_mode_selector(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
-        if ($url === null) {
-            $url = $this->page->url;
-        }
 
-        $menu = new action_menu;
-        $menu->attributes['class'] .= ' view-mode-selector vms';
-
-        $selected = null;
-        foreach ($modes as $mode => $modestr) {
-            $attributes = array(
-                'class' => 'vms-mode',
-                'data-mode' => $mode
-            );
-            if ($currentmode === $mode) {
-                $attributes['class'] .= ' currentmode';
-                $selected = $modestr;
-            }
-            if ($selected === null) {
-                $selected = $modestr;
-            }
-            $modeurl = new moodle_url($url, array($param => $mode));
-            if ($mode === 'default') {
-                $modeurl->remove_params($param);
-            }
-            $menu->add(new action_menu_link_secondary($modeurl, null, $modestr, $attributes));
-        }
-
-        $menu->set_menu_trigger($selected);
-
-        // filter
-        $html = html_writer::start_div('view-mode-selector vms');
-        //$html .= get_string('viewing').' '.$this->render($menu);
-        $html .= html_writer::start_span('bold').get_string('viewing').html_writer::end_span().' '.$this->render($menu);
-
-        $html .= html_writer::end_div();
-
-        return $html;
-    }
 
     /**
      * Taken from management_heading() in management_renderer.php
@@ -913,7 +874,7 @@ class badgemaker_renderer extends core_badges_renderer {
      * @param int|null $categoryid The currently selected category if there is one.
      * @return string
      */
-    public function library_heading($heading, $viewmode = null, $categoryid = null, $badges) { // copy of management_heading
+    public function library_heading($heading, $caption, $menu, $search) { // copy of management_heading
         global $PAGE;
 
         $html = html_writer::start_div('coursecat-management-header clearfix'); // coursecat-management-header needed to make heading on same line.
@@ -932,23 +893,29 @@ class badgemaker_renderer extends core_badges_renderer {
         //     $html .= $this->heading($heading, 4);
         //     $html .= "</div>";
         // }
-        if ($viewmode !== null) {
+       // if ($viewmode !== null) {
             // $html .= html_writer::start_div();
 
             //$html .= $this->view_mode_selector(\core_course\management\helper::get_management_viewmodes(), $viewmode); // MH removed
 
             // the key appears in the URL so keep it short
-            $viewmodes = array( // MH
-                'combined' => get_string('course_and_site_badges', 'local_badgemaker'),
-                'course' => get_string('course_badges', 'local_badgemaker'),
-                'site' => get_string('site_badges', 'local_badgemaker')
-            );
+
             // MB: I don't think it's wise to rely on another plugin if we can avoid it, even if it's one of the default ones.
             // $managementRenderer = $PAGE->get_renderer('core_course', 'management'); // MH
 // $html .= '<div style="clear: left;"></div>';
-            $html .= "<div style=\"float: right;\">";
-            $html .= $this->badgemaker_view_mode_selector($viewmodes, $viewmode);//   $managementRenderer->view_mode_selector($viewmodes, $viewmode) . '</p>'; // MH
-            $html .= "</div>";
+
+        //$html .= "<div style=\"float: right;\">";
+       // $menu = $this->badgemaker_view_mode_selector(get_string('viewing'), $modes, $currentmode);//   $managementRenderer->view_mode_selector($viewmodes, $viewmode) . '</p>'; // MH
+
+        // filter
+        $html .= html_writer::start_div('view-mode-selector vms');
+
+        $html .= html_writer::start_span('bold').$caption.html_writer::end_span();
+        $html .= $this->render($menu);
+
+        $html .= html_writer::end_div();
+
+           // $html .= "</div>";
 
             /*
             if ($viewmode === 'courses') {
@@ -963,11 +930,11 @@ class badgemaker_renderer extends core_badges_renderer {
             }
             */
             // $html .= html_writer::end_div();
-        }
-        $html .= '<div style="clear: both;"></div>';
-        $html .= html_writer::end_div();
 
-         $searchform = $this->helper_search_form($badges->search);
+        //$html .= '<div style="clear: both;"></div>';
+    //    $html .= html_writer::end_div();
+
+         $searchform = $this->helper_search_form($search);
         //  $html .= "<div style=\"float: left;\">";
          $html .= $searchform;
         //  $html .= "</div>";

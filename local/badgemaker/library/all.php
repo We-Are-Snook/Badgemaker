@@ -237,7 +237,16 @@ if (!empty($search)) {
 
 //$heading = $output->heading(get_string('badgestoearn', 'badges', $totalcount), 4);
 
-echo $output->library_heading($libhead, $viewmode, null, $badges);
+//echo $output->helper_search_form($badges->search);
+
+$viewmodes = array( // MH
+    'combined' => get_string('course_and_site_badges', 'local_badgemaker'),
+    'course' => get_string('course_badges', 'local_badgemaker'),
+    'site' => get_string('site_badges', 'local_badgemaker')
+);
+$menu = local_badgemaker_view_mode_menu($viewmodes, $viewmode);
+echo $output->library_heading($libhead, get_string('viewing'), $menu, $badges->search);
+
 //echo $output->heading('All badges available on this site');
 // echo $OUTPUT->box('', 'notifyproblem hide', 'check_connection'); // MB... pretty sure this is only needed if there is a backpack connect link.
 

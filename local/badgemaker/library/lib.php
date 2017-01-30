@@ -35,3 +35,39 @@ function local_badgemaker_library_print_heading(moodle_url $currenturl, $title =
     $tabtree = new tabtree($tabs, $currenttab);
     echo $OUTPUT->render($tabtree);
 }
+
+// modified from $managementRenderer->view_mode_selector
+function local_badgemaker_view_mode_menu(array $modes, $currentmode, moodle_url $url = null, $param = 'view') {
+    if ($url === null) {
+        global $PAGE;
+        $url = $PAGE->url;
+    }
+
+    $menu = new action_menu;
+    $menu->attributes['class'] .= ' view-mode-selector vms';
+
+    $selected = null;
+    foreach ($modes as $mode => $modestr) {
+        $attributes = array(
+            'class' => 'vms-mode',
+            'data-mode' => $mode
+        );
+        if ($currentmode === $mode) {
+            $attributes['class'] .= ' currentmode';
+            $selected = $modestr;
+        }
+        if ($selected === null) {
+            $selected = $modestr;
+        }
+        $modeurl = new moodle_url($url, array($param => $mode));
+        if ($mode === 'default') {
+            $modeurl->remove_params($param);
+        }
+        $menu->add(new action_menu_link_secondary($modeurl, null, $modestr, $attributes));
+    }
+
+    // outputs the current selection
+    $menu->set_menu_trigger($selected);
+
+    return $menu;
+}
