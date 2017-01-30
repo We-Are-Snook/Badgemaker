@@ -9,7 +9,7 @@
 require_once(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])))) . '/config.php'); // allows going up through a symlink
 require_once($CFG->libdir . '/badgeslib.php');
 require_once(dirname(dirname(__FILE__)).'/renderer.php');
-require_once(dirname(dirname(__FILE__)).'/lib.php');
+require_once(dirname(__FILE__).'/lib.php');
 
 
 $path = '/local/badgemaker/library/all.php';
@@ -155,15 +155,13 @@ else if($viewmode === 'course'){
 
 $output = new badgemaker_renderer($PAGE, '');
 
+//$output = $PAGE->get_renderer('badgemaker', 'local_badgemaker');
+
 // Include JS files for backpack support.
 badges_setup_backpack_js(); // MH must be before header is output
 
 echo $OUTPUT->header();
 
-// Combine image and title into a single heading...
-$img = html_writer::empty_tag('img', array('src' => '../BM_icon.png', 'width' => '10%')); // align center does not work, right does though.
-echo $OUTPUT->heading($img.$title);
-// $img = html_writer::empty_tag('img', array('src' => '../logo_web_800x600.png')); // align center does not work, right does though.
 // echo $OUTPUT->box($img, 'boxwidthwide boxaligncenter');
 // echo '<p>';
 
@@ -176,6 +174,7 @@ $PAGE->set_context(context_system::instance());
 // we will use these params if decide to persist search term between tabs.
 $context = context_system::instance();
 $params = array('page' => $page);
+// we will use these params if decide to persist search term between tabs.
 //if ($contextid) {
 //    $params['contextid'] = $contextid;
 //}
@@ -187,9 +186,7 @@ $params = array('page' => $page);
 //}
 $baseurl = new moodle_url($path, $params);
 
-if ($editcontrols = local_badgemaker_tabs($context, $baseurl)) {
-    echo $OUTPUT->render($editcontrols);
-}
+local_badgemaker_library_print_heading($baseurl, $title);
 
 // if recipient search then we will sort in code later, so blank it for SQL
 if ($sortby == 'recipients') {

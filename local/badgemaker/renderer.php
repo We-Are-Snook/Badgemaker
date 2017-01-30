@@ -8,7 +8,7 @@
 
 require_once($CFG->libdir . '/badgeslib.php');
 require_once($CFG->libdir . '/tablelib.php');
-require_once($CFG->dirroot . "/badges/renderer.php");
+require_once($CFG->dirroot . '/badges/renderer.php');
 
 /**
  * Standard HTML output renderer for badges
