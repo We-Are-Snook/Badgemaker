@@ -104,17 +104,23 @@ function local_badgemaker_library_sort_menu($currSortBy = null, $currSortHow = n
         $url = $sort['url'];
         $title = $sort['title'];
 
+        $attributes = array(
+            'class' => 'vms-mode'
+            //'data-mode' => $mode whats this for?
+        );
+
         if( $currSortBy == $url->param('sort')){
             if( $currSortHow == $url->param('dir')) {
+                $attributes['class'] .= ' currentmode';
                 $trigger = $title;
             }
         }
-        $actions[] =  new action_menu_link_secondary($url,
-            null,
-            $title);
+
+        $actions[] =  new action_menu_link_secondary($url, null, $title, $attributes);
     }
 
     $menu = new action_menu($actions);
+    $menu->attributes['class'] .= ' view-mode-selector vms';
 
     $menu->set_menu_trigger($trigger);
     // $sortdropdown = html_writer::div($this->render($menu), 'listing-actions course-listing-actions');

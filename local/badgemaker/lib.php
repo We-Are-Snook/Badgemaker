@@ -81,7 +81,7 @@ function local_badgemaker_badges_bake($hash, $badgeid, $userid = 0, $pathhash = 
  }
 
  function local_badgemaker_logo_source() {
-   return '/local/badgemaker/BM_icon.png';
+   return new moodle_url('/local/badgemaker/BM_icon.png');
  }
 
  function local_badgemaker_assignsubmission_file_pluginfile_user_has_badge_for_course_module_id($userid, $courseid, $cmid) {

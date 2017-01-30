@@ -863,10 +863,8 @@ class badgemaker_renderer extends core_badges_renderer {
 
         // filter
         $html .= html_writer::start_div('view-mode-selector vms');
-
-        $html .= html_writer::start_span('bold').$caption.html_writer::end_span();
+        $html .= html_writer::start_span('bold') . $caption . html_writer::end_span();
         $html .= $this->render($menu);
-
         $html .= html_writer::end_div();
 
             /*
