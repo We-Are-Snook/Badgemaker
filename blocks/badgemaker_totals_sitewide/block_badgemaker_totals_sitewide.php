@@ -10,6 +10,7 @@ global $CFG;
 
 require_once($CFG->libdir . "/badgeslib.php");
 require_once($CFG->dirroot . '/local/badgemaker/lib.php');
+require_once($CFG->dirroot . "/local/badgemaker/renderer.php");
 
 class block_badgemaker_totals_sitewide extends block_base {
 
@@ -91,9 +92,8 @@ class block_badgemaker_totals_sitewide extends block_base {
         //   $this->content->footer = html_writer::link($blurl, $foot);
         // }
 
-        $ls = local_badgemaker_logo_source();
-        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '15%'));
-        $this->content->footer = '<div align="center">'.html_writer::link($blurl, $img).'</div>';
+        $bmOutput = new badgemaker_renderer($this->page, 'badges');
+        $this->content->text .= $bmOutput->print_badgemaker_linked_logo();
 
         return $this->content;
     }

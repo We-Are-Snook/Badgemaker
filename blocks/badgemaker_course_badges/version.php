@@ -9,5 +9,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_badgemaker_course_badges';
-$plugin->version = 2017012400;
+$plugin->version = 2017013100;
 $plugin->requires = 2015111600;

@@ -74,24 +74,13 @@ class block_badgemaker_newest_course_badges extends block_base {
 
         $badges = badges_get_badges(BADGE_TYPE_COURSE, 0, 'timecreated', 'DESC', 0, $this->config->numberofbadges);
 
-        if (count($badges) > 0){
-            $output = new badgemaker_renderer($this->page, 'badges');
-            $this->content->text .= $output->print_meta_badges_list($badges, 'center');
-        } else {
+        if (count($badges) <= 0) {
           return null;
-          // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_newest_course_badges');
         }
 
-        $this->content->text .= html_writer::tag('hr', '');
-        $this->content->text .= html_writer::start_div('lib-button', array('align' => 'center'));
-        $liblink = local_badgemaker_libraryPageURL();
-        $logolink = html_writer::start_tag('a', array('href' => $liblink));
-        $ls = local_badgemaker_logo_source();
-        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
-        $logolink .= $img;
-        $logolink .= html_writer::end_tag('a');
-        $this->content->text .= $logolink;
-        $this->content->text .= html_writer::end_div('lib_button');
+        $output = new badgemaker_renderer($this->page, 'badges');
+        $this->content->text .= $output->print_meta_badges_list($badges, 'center');
+        $this->content->text .= $output->print_badgemaker_linked_logo();
 
         return $this->content;
 	}

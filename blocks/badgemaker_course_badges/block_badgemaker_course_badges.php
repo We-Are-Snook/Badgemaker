@@ -2,7 +2,7 @@
 
 /**
  * @package    Badgemaker
- * @copyright  2016 We Are Snook <code@wearesnook.com>
+ * @copyright  2017 We Are Snook <code@wearesnook.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  */
 
@@ -98,15 +98,7 @@ class block_badgemaker_course_badges extends block_base {
 
         $this->content->text .= $output->print_combined_overview_list($earned, $earnable, 100, 'center', null, null, false);
 
-        $this->content->text .= html_writer::start_div('course_badges_logo', array('align' => 'center'));
-        $liblink = local_badgemaker_libraryPageURL();
-        $logolink = html_writer::start_tag('a', array('href' => $liblink));
-        $ls = local_badgemaker_logo_source();
-        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '50px'));
-        $logolink .= $img;
-        $logolink .= html_writer::end_tag('a');
-        $this->content->text .= $logolink;
-        $this->content->text .= html_writer::end_div('course_badges_logo');
+        $this->content->text .= $output->print_badgemaker_linked_logo();
 
         return $this->content;
 	}

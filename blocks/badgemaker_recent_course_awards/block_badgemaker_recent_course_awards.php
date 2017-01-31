@@ -84,21 +84,13 @@ class block_badgemaker_recent_course_awards extends block_base {
           $output = new badgemaker_renderer($this->page, 'badges');
             // $output = $this->page->get_renderer('core', 'badges');
             $this->content->text = $output->recent_course_badges_list($badges, 0, null, 'center');
+            $this->content->text .= $output->print_badgemaker_linked_logo();
         } else {
           return null;
             // $this->content->text .= get_string('nothingtodisplay', 'block_badgemaker_recent_course_awards');
         }
 
-        $this->content->text .= html_writer::tag('hr', '');
-        $this->content->text .= html_writer::start_div('lib-button', array('align' => 'center'));
-        $liblink = local_badgemaker_libraryPageURL();
-        $logolink = html_writer::start_tag('a', array('href' => $liblink));
-        $ls = local_badgemaker_logo_source();
-        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
-        $logolink .= $img;
-        $logolink .= html_writer::end_tag('a');
-        $this->content->text .= $logolink;
-        $this->content->text .= html_writer::end_div('lib_button');
+
 
         return $this->content;
     }

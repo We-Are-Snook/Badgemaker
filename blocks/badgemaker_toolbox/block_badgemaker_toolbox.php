@@ -9,6 +9,7 @@
 global $CFG;
 
 require_once($CFG->dirroot . '/local/badgemaker/lib.php');
+require_once($CFG->dirroot . '/local/badgemaker/renderer.php');
 
 class block_badgemaker_toolbox extends block_base {
 
@@ -95,15 +96,8 @@ class block_badgemaker_toolbox extends block_base {
         $buttonUrl = $url->out();
         $this->content->text .= $OUTPUT->single_button($buttonUrl, $buttonTitle, 'get');
 
-        $this->content->text .= html_writer::tag('hr', '');
-
-        $liblink = local_badgemaker_libraryPageURL();
-        $logolink = html_writer::start_tag('a', array('href' => $liblink));
-        $ls = local_badgemaker_logo_source();
-        $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
-        $logolink .= $img;
-        $logolink .= html_writer::end_tag('a');
-        $this->content->text .= $logolink;
+        $bmOutput = new badgemaker_renderer($this->page, 'badges');
+        $this->content->text .= $bmOutput->print_badgemaker_linked_logo();
 
         $this->content->text .= html_writer::end_div('tool-buttons');
 

@@ -124,16 +124,7 @@ class block_badgemaker_awarded_in_managed_courses extends block_base {
     $just = $this->instance->region === 'content' ? 'left' : 'center';
 		$this->content->text .= $output->recent_course_badges_list($allBadges, null, null, $just);
 
-    $this->content->text .= html_writer::tag('hr', '');
-    $this->content->text .= html_writer::start_div('lib-button', array('align' => 'center'));
-    $liblink = local_badgemaker_libraryPageURL();
-    $logolink = html_writer::start_tag('a', array('href' => $liblink));
-    $ls = local_badgemaker_logo_source();
-    $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '14%'));
-    $logolink .= $img;
-    $logolink .= html_writer::end_tag('a');
-    $this->content->text .= $logolink;
-    $this->content->text .= html_writer::end_div('lib_button');
+    $this->content->text .= $output->print_badgemaker_linked_logo();
 
         return $this->content;
 	}

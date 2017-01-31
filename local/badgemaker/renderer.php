@@ -15,6 +15,20 @@ require_once($CFG->dirroot . '/badges/renderer.php');
  */
 class badgemaker_renderer extends core_badges_renderer {
 
+  public function print_badgemaker_linked_logo() {
+    $logoContent = html_writer::tag('hr', '');
+    $logoContent .= html_writer::start_div('lib-button', array('align' => 'center'));
+    $liblink = local_badgemaker_libraryPageURL();
+    $logolink = html_writer::start_tag('a', array('href' => $liblink));
+    $ls = local_badgemaker_logo_source();
+    $img = html_writer::empty_tag('img', array('src' => $ls, 'width' => '40px'));
+    $logolink .= $img;
+    $logolink .= html_writer::end_tag('a');
+    $logoContent .= $logolink;
+    $logoContent .= html_writer::end_div('lib-button');
+    return $logoContent;
+  }
+
   public function print_badgemaker_badges_list($badges, $userid, $profile = false, $external = false) {
       global $USER, $CFG;
       foreach ($badges as $badge) {
