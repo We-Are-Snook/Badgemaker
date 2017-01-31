@@ -144,7 +144,14 @@ class badgemaker_renderer extends core_badges_renderer {
 
       if (count($badges->badges) > 0 || $withoutSearchCount > 0) {
           $htmllist = $this->print_badgemaker_badges_list($pageBadges, $USER->id);
-          $localhtml .= $tableDivStart /*. $subheading . $searchform  . $breakTag . $htmlpagingbar*/ . $htmllist . $breakTag . $htmlpagingbar . $downloadall . $downloadAllInfo . $backpackconnect;
+          $localhtml .= $tableDivStart /*. $subheading . $searchform  . $breakTag . $htmlpagingbar*/ . $htmllist;
+
+          $localhtml .= $breakTag . $htmlpagingbar;
+
+          $localhtml .= $breakTag . $downloadall . $downloadAllInfo;
+
+          $localhtml .= $breakTag . $backpackconnect;
+
       } else {
           $localhtml .= /*$searchform .*/ $this->output->notification(get_string('nobadges', 'badges'));
       }

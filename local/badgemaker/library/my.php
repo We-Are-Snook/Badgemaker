@@ -33,7 +33,7 @@ $hash        = optional_param('hash', '', PARAM_ALPHANUM);
 $hide        = optional_param('hide', 0, PARAM_INT);
 $show        = optional_param('show', 0, PARAM_INT);
 
-$badgesPerPage = 10;
+$badgesPerPage = 1;
 
 if ($clearsearch) {
     $search = '';
