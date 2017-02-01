@@ -83,7 +83,8 @@ class block_badgemaker_totals_sitewide extends block_base {
         $this->content->text .= html_writer::link($blurl, ''.$issuedCount);
         $this->content->text .= "</b>" . get_string('awarded', 'block_badgemaker_totals_sitewide');
         $this->content->text .= '<br>' . "<b>";
-        $this->content->text .= html_writer::link($blurl, ''.$totalBadges);
+	$mlurl = local_badgemaker_libraryAllPageURL();
+        $this->content->text .= html_writer::link($mlurl, ''.$totalBadges);
         $this->content->text .= '</b>' . get_string('all_badges', 'block_badgemaker_totals_sitewide');
         $this->content->text .= html_writer::end_span();
 
