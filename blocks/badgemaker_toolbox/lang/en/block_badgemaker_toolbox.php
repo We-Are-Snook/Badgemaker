@@ -2,7 +2,7 @@
 
 $string['pluginname'] = 'BadgeMaker - Toolbox';
 $string['title'] = 'BadgeMaker Toolbox';
-$string['button_text'] = 'New Badge';
+$string['button_text'] = 'Badge Library';
 $string['course_button_text'] = 'New Course Badge';
 $string['site_button_text'] = 'New Sitewide Badge';
 $string['badges:addinstance'] = 'Add a New BadgeMaker Toolbox block';
