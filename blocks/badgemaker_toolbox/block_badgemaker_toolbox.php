@@ -71,7 +71,7 @@ class block_badgemaker_toolbox extends block_base {
 
         // button
         $buttonUrl = local_badgemaker_libraryPageURL();
-        $buttonTitle = get_string('button_text', 'block_badgemaker_library_button');
+        $buttonTitle = get_string('button_text', 'block_badgemaker_toolbox');
         $this->content->text .= $OUTPUT->single_button($buttonUrl, $buttonTitle);
 
         $course = $this->page->course;
