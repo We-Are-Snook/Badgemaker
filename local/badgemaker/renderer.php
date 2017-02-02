@@ -523,7 +523,7 @@ class badgemaker_renderer extends core_badges_renderer {
           $download = $status = $push = '';
           if ($earnedThisOne) {
             $di = $badge->dateissued;
-            $dateissued = html_writer::tag('span', '<br>'.userdate($di, '%d %B %y'));//, array('class' => $textClass));
+            $dateissued = html_writer::tag('span', userdate($di, '%d %B %y'));//, array('class' => $textClass));
             if (empty($userid)) {
               $userid = null;
             }
