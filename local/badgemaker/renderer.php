@@ -470,7 +470,7 @@ class badgemaker_renderer extends core_badges_renderer {
         return $htmlnew . $bmLogo;
     }
 
-    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40, $alignment = 'left', $userid = null, $profile = null, $useBadgeImageClass = true) {
+    public function print_combined_overview_list($earnedBadges, $earnableBadges, $badgesize = 40, $alignment = 'left', $userid = null, $profile = null, $useBadgeImageClass = true, $alternativeLargerImageClass = false) {
       global $USER, $CFG;
       $badges = array();
       if (count($earnedBadges) > 0) {
@@ -498,11 +498,14 @@ class badgemaker_renderer extends core_badges_renderer {
               $imageurl = $badge->imageUrl;
           }
 
-          $name = html_writer::tag('span', $bname);//, array('class' => $textClass));
+          $name = html_writer::tag('span', $bname, array('class' => $textClass));
 
           $imageAtts = array('src' => $imageurl, 'height' => $badgesize, 'width' => $badgesize);
           if ($useBadgeImageClass) {
-            $imageClass = $earnedThisOne ? 'small-badge-icon' : 'ghosted-small-badge-icon';
+            $earnedBadgeIcon = $alternativeLargerImageClass ? 'badge-icon' : 'small-badge-icon';
+            $notEarnedBadgeIcon = $alternativeLargerImageClass ? 'ghosted-badge-icon' : 'ghosted-small-badge-icon';
+            $imageClass = $earnedThisOne ? $earnedBadgeIcon : $notEarnedBadgeIcon;
+            // echo "<br><br>$imageClass</br></br>";
             $imageAtts['class'] = $imageClass;
           }
 

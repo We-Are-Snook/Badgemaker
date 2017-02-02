@@ -1,0 +1,13 @@
+
+.ghosted-badge-icon {
+  height: 100px;
+  width: 100px;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+
+.ghosted-badge-name {
+  display:block;
+  padding:5px;
+  color: gray;
+}
